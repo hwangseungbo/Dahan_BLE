@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/settingFragment"
+    android:layout_width="1080px"
+    android:layout_height="2100px"
+    tools:context=".SettingFragment" >
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="1080px"
+            android:layout_height="3425px">
+
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="1080px"
+                android:layout_height="3425px"
+                android:src="@drawable/settingfrag_back"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <Switch
+                android:id="@+id/fr_sw_autocomp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="64dp"
+                android:layout_marginEnd="52dp"
+                android:thumb="@drawable/switch_thumb"
+                android:track="@drawable/switch_track_selector"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/fr_btn_digital" />
+
+            <Switch
+                android:id="@+id/fr_sw_flow1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="136dp"
+                android:layout_marginEnd="96dp"
+                android:checked="true"
+                android:thumb="@drawable/switch_thumb"
+                android:track="@drawable/switch_track_selector"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/fr_sw_autocomp" />
+
+            <Switch
+                android:id="@+id/fr_sw_flow2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="36dp"
+                android:checked="true"
+                android:thumb="@drawable/switch_thumb"
+                android:track="@drawable/switch_track_selector"
+                app:layout_constraintEnd_toEndOf="@+id/fr_sw_flow1"
+                app:layout_constraintTop_toBottomOf="@+id/fr_sw_flow1" />
+
+            <Switch
+                android:id="@+id/fr_sw_flow3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="36dp"
+                android:checked="true"
+                android:thumb="@drawable/switch_thumb"
+                android:track="@drawable/switch_track_selector"
+                app:layout_constraintEnd_toEndOf="@+id/fr_sw_flow2"
+                app:layout_constraintTop_toBottomOf="@+id/fr_sw_flow2" />
+
+            <Button
+                android:id="@+id/fr_btn_cancel"
+                android:layout_width="160px"
+                android:layout_height="80px"
+                android:layout_marginTop="92dp"
+                android:layout_marginEnd="24dp"
+                android:background="@drawable/normal_button_drawable2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/btn_back"
+                android:layout_width="70px"
+                android:layout_height="95px"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/back_button_drawable"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/iv_bluetoothstate2"
+                android:layout_width="95px"
+                android:layout_height="95px"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ble_on" />
+
+            <Button
+                android:id="@+id/fr_btn_save"
+                android:layout_width="160px"
+                android:layout_height="80px"
+                android:layout_marginTop="92dp"
+                android:layout_marginEnd="12dp"
+                android:background="@drawable/normal_button_drawble"
+                app:layout_constraintEnd_toStartOf="@+id/fr_btn_cancel"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/fr_btn_analog"
+                android:layout_width="375px"
+                android:layout_height="119px"
+                android:layout_marginStart="48dp"
+                android:layout_marginTop="212dp"
+                android:background="@drawable/analog_button_off"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/fr_btn_digital"
+                android:layout_width="375px"
+                android:layout_height="119px"
+                android:layout_marginTop="212dp"
+                android:layout_marginEnd="48dp"
+                android:background="@drawable/digital_button_on"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/fr_et_flow1"
+                android:layout_width="160px"
+                android:layout_height="76px"
+                android:layout_marginStart="12dp"
+                android:background="@drawable/time_button_pressed"
+                android:ems="10"
+                android:gravity="center"
+                android:inputType="text"
+                android:text="10"
+                android:textColor="#FFFFFF"
+                app:layout_constraintStart_toEndOf="@+id/fr_sw_flow1"
+                app:layout_constraintTop_toTopOf="@+id/fr_sw_flow1" />
+
+            <EditText
+                android:id="@+id/fr_et_flow2"
+                android:layout_width="160px"
+                android:layout_height="76px"
+                android:layout_marginStart="12dp"
+                android:background="@drawable/time_button_pressed"
+                android:ems="10"
+                android:gravity="center"
+                android:inputType="text"
+                android:text="1"
+                android:textColor="#FFFFFF"
+                app:layout_constraintStart_toEndOf="@+id/fr_sw_flow2"
+                app:layout_constraintTop_toTopOf="@+id/fr_sw_flow2" />
+
+            <EditText
+                android:id="@+id/fr_et_flow3"
+                android:layout_width="160px"
+                android:layout_height="76px"
+                android:layout_marginStart="12dp"
+                android:background="@drawable/time_button_pressed"
+                android:ems="10"
+                android:gravity="center"
+                android:inputType="text"
+                android:text="60"
+                android:textColor="#FFFFFF"
+                app:layout_constraintStart_toEndOf="@+id/fr_sw_flow3"
+                app:layout_constraintTop_toTopOf="@+id/fr_sw_flow3" />
+
+            <Button
+                android:id="@+id/fr_btn_flowreset"
+                android:layout_width="198px"
+                android:layout_height="100px"
+                android:layout_marginTop="340dp"
+                android:layout_marginEnd="32dp"
+                android:background="@drawable/reset_button_drawable"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/fr_btn_power4" />
+
+            <Button
+                android:id="@+id/fr_btn_appreset"
+                android:layout_width="198px"
+                android:layout_height="100px"
+                android:layout_marginTop="50dp"
+                android:layout_marginEnd="32dp"
+                android:background="@drawable/reset_button_drawable"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/fr_btn_flowreset" />
+
+            <Button
+                android:id="@+id/fr_btn_power1"
+                android:layout_width="160px"
+                android:layout_height="76px"
+                android:layout_marginStart="48dp"
+                android:layout_marginTop="130dp"
+                android:background="@drawable/time_button_pressed"
+                android:text="0.5"
+                android:textColor="#FFFFFF"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/fr_sw_flow3" />
+
+            <Button
+                android:id="@+id/fr_btn_power2"
+                android:layout_width="160px"
+                android:layout_height="76px"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="130dp"
+                android:background="@drawable/time_button_unpressed"
+                android:text="1"
+                android:textColor="#FFFFFF"
+                app:layout_constraintStart_toEndOf="@+id/fr_btn_power1"
+                app:layout_constraintTop_toBottomOf="@+id/fr_sw_flow3" />
+
+            <Button
+                android:id="@+id/fr_btn_power3"
+                android:layout_width="160px"
+                android:layout_height="76px"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="130dp"
+                android:background="@drawable/time_button_unpressed"
+                android:text="2"
+                android:textColor="#FFFFFF"
+                app:layout_constraintStart_toEndOf="@+id/fr_btn_power2"
+                app:layout_constraintTop_toBottomOf="@+id/fr_sw_flow3" />
+
+            <Button
+                android:id="@+id/fr_btn_power4"
+                android:layout_width="160px"
+                android:layout_height="76px"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="130dp"
+                android:background="@drawable/time_button_unpressed"
+                android:text="3"
+                android:textColor="#FFFFFF"
+                app:layout_constraintStart_toEndOf="@+id/fr_btn_power3"
+                app:layout_constraintTop_toBottomOf="@+id/fr_sw_flow3" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</FrameLayout>

@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainFragment"
+    android:layout_width="1080px"
+    android:layout_height="2100px"
+    tools:context=".MainFragment" >
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="1080px"
+            android:layout_height="2388px">
+
+            <ImageView
+                android:id="@+id/mainfrag_back_digital"
+                android:layout_width="1080px"
+                android:layout_height="2388px"
+                android:src="@drawable/mainfrag_back_digital"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <TextView
+                android:id="@+id/fr_tv_acc_time"
+                android:layout_width="96dp"
+                android:layout_height="41dp"
+                android:layout_marginStart="96dp"
+                android:layout_marginTop="128dp"
+                android:fontFamily="@font/notosanskrmedium"
+                android:gravity="center"
+                android:text="00:00:00"
+                android:textColor="#000000"
+                android:textSize="18sp"
+                app:layout_constraintStart_toEndOf="@+id/fr_tv_action_time"
+                app:layout_constraintTop_toBottomOf="@+id/fr_iv_act" />
+
+            <Button
+                android:id="@+id/btn_setting"
+                android:layout_width="95px"
+                android:layout_height="95px"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/setting_button_drawble"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/iv_bluetoothstate"
+                android:layout_width="95px"
+                android:layout_height="95px"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ble_on" />
+
+            <TextView
+                android:id="@+id/fr_tv_flow"
+                android:layout_width="221dp"
+                android:layout_height="252dp"
+                android:layout_marginTop="96dp"
+                android:layout_marginEnd="156dp"
+                android:fontFamily="@font/notosanskrmedium"
+                android:gravity="right"
+                android:text="0.0"
+                android:textColor="#000000"
+                android:textSize="100dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/fr_iv_act"
+                android:layout_width="88px"
+                android:layout_height="12px"
+                android:layout_marginStart="68dp"
+                android:layout_marginTop="430dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/action_state_nosign" />
+
+            <ImageView
+                android:id="@+id/fr_iv_stop"
+                android:layout_width="88px"
+                android:layout_height="12px"
+                android:layout_marginStart="87dp"
+                android:layout_marginTop="430dp"
+                app:layout_constraintStart_toEndOf="@+id/fr_iv_act"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/action_state_stop" />
+
+            <ImageView
+                android:id="@+id/fr_iv_post"
+                android:layout_width="88px"
+                android:layout_height="12px"
+                android:layout_marginStart="87dp"
+                android:layout_marginTop="430dp"
+                app:layout_constraintStart_toEndOf="@+id/fr_iv_stop"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/action_state_nosign" />
+
+            <TextView
+                android:id="@+id/fr_tv_action_time"
+                android:layout_width="96dp"
+                android:layout_height="41dp"
+                android:layout_marginStart="60dp"
+                android:layout_marginTop="128dp"
+                android:fontFamily="@font/notosanskrmedium"
+                android:gravity="center"
+                android:text="00:00:00"
+                android:textColor="#000000"
+                android:textSize="18sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/fr_iv_act" />
+
+            <Switch
+                android:id="@+id/fr_sw_comp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="82dp"
+                android:layout_marginEnd="80dp"
+                android:thumb="@drawable/switch_thumb"
+                android:track="@drawable/switch_track_selector"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/fr_tv_acc_time" />
+
+            <Switch
+                android:id="@+id/fr_sw_wash"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="80dp"
+                android:thumb="@drawable/switch_thumb"
+                android:track="@drawable/switch_track_selector"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/fr_sw_comp" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</FrameLayout>
