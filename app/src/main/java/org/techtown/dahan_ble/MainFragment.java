@@ -57,7 +57,7 @@ public class MainFragment extends Fragment {
                 mainActivity.onFragmentChanged(2);
             }
         });
-        
+
         tv_connect.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
