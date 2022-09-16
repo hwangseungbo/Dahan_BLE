@@ -9,7 +9,7 @@ BLE를 활용한 안드로이드 어플리케이션.
 
 ### ScreenShot
 -----
-<center><img src="/img/1.jpg" width="250"></center>
+<p align="center"><img src="/img/1.jpg" width="250"></p>
 <center><img src="/img/2.jpg" width="250"></center>
 <center><img src="/img/3.jpg" width="250"></center>
 <center><img src="/img/4.jpg" width="250"></center>
