@@ -9,6 +9,7 @@ BLE를 활용한 안드로이드 어플리케이션.
 
 ### ScreenShot
 -----
+<img src="/img/4.jpg" width="300" height="300">
 <img src="https://github.com/hwangseungbo/Dahan_BLE/blob/master/img/1.jpg" width="200">
 <img src="https://github.com/hwangseungbo/Dahan_BLE/blob/master/img/2.jpg" width="200">
 <img src="https://github.com/hwangseungbo/Dahan_BLE/blob/master/img/3.jpg" width="200">
