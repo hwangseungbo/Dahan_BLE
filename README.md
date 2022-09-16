@@ -11,7 +11,7 @@ BLE를 활용한 안드로이드 어플리케이션.
 -----
 <img src="/img/1.jpg" width="300">
 <img src="/img/2.jpg" width="300">
-![메인화면](/img/3.jpg){: width="300"}
-![설정화면](/img/4.jpg){: width="300"}
+![main](/img/3.jpg){: width="300"}
+![setting](/img/4.jpg){: width="300"}
 
 
