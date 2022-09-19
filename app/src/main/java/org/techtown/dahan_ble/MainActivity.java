@@ -39,6 +39,7 @@ import com.ficat.easyble.BleManager;
 import com.ficat.easyble.gatt.callback.BleCallback;
 import com.ficat.easyble.gatt.callback.BleConnectCallback;
 import com.ficat.easyble.gatt.callback.BleNotifyCallback;
+import com.ficat.easyble.gatt.callback.BleWriteCallback;
 import com.ficat.easyble.scan.BleScanCallback;
 
 
@@ -46,6 +47,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -62,17 +64,19 @@ public class MainActivity extends AppCompatActivity {
     private SharedPreferences appData;
 
     public static String mode;  // 메인화면 테마 설정(0 = 디지털 모드, 1 = 아날로그 모드)
-    public static String mode_default = "0"; // 메인화면 테마설정 초기값(초기화시 이용)
+    public static String mode_default = "0"; //초기값(초기화시 이용)
     public static String autoCompressure;   // 컴프레셔 자동동작(0 = 자동동작 x, 1 = 자동동작 o)
-    public static String autoCompressure_default = "0";
+    public static String autoCompressure_default = "0"; //초기값(초기화시 이용)
     public static String flow1;    // 유량계 오동작 알람설정(0 = off, 1 = on, 뒤에 숫자는 주기[초])
-    public static String flow1_default = "1,10";
+    public static String flow1_default = "1,10";    //초기값(초기화시 이용)
     public static String flow2;    // 유량계 최소값 모니터링(0 = off, 1 = on, 뒤에 숫자는 주기[초])
-    public static String flow2_default = "1,1";
+    public static String flow2_default = "1,1"; //초기값(초기화시 이용)
     public static String flow3;    // 유량계 최댓값 모니터링(0 = off, 1 = on, 뒤에 숫자는 주기[초])
-    public static String flow3_default = "1,60";
+    public static String flow3_default = "1,60";    //초기값(초기화시 이용)
     public static String cleanPower; // 세척강도
-    public static String cleanPower_default = "0.5";
+    public static String cleanPower_default = "0.5";    //초기값(초기화시 이용)
+    public static boolean comp_control = false; //컴프레셔 제어
+    public static boolean wash_control = false; //배관세척 제어
 
     private String connectedDeviceMacAddress;
 
@@ -181,6 +185,7 @@ public class MainActivity extends AppCompatActivity {
                 }
 
 
+                // ※※※ UUID of HC-42: Search UUID: FFF0, service UUID: FFE0, transparent transmission data UUID: FFE1.
                 bleManager.notify(device, "0000FFE0-0000-1000-8000-00805F9B34FB", "0000FFE1-0000-1000-8000-00805F9B34FB", new BleNotifyCallback() {
                     @Override
                     public void onCharacteristicChanged(byte[] data, BleDevice device) {
@@ -216,6 +221,41 @@ public class MainActivity extends AppCompatActivity {
                             } else {
                                 //Log.d("판별 : ", "X 비정상 데이터");
                             }
+
+
+                            // 데이터를 재취합하여 보내보자
+                            // 컴프레셔전원명령,배관세척명령,솔벨브온오프주기설정값,배관세척 동작시간, 누적시간리셋여부 순이다.
+                            //String send_Data = "$--DAHAN-AND_1,1,0.5,35:12,1*15\r\n";
+                            String send_Data = "$--DAHAN-AND_";
+
+                            //컴프레셔 전원명령 체크
+                            if(comp_control){
+                                send_Data = send_Data + "1,";
+                            }else {
+                                send_Data = send_Data + "0,";
+                            }
+                            //배관 세척명령 체크
+                            if(wash_control){
+                                send_Data = send_Data + "1,";
+                            }else {
+                                send_Data = send_Data + "0,";
+                            }
+                            //솔벨브온오프주기설정값 체크(cleanPower)
+                            send_Data = send_Data + cleanPower;
+
+                            byte[] send = send_Data.getBytes();
+                            bleManager.write(device, "0000FFE0-0000-1000-8000-00805F9B34FB", "0000FFE1-0000-1000-8000-00805F9B34FB", send, new BleWriteCallback() {
+                                @Override
+                                public void onWriteSuccess(byte[] data, BleDevice device) {
+                                    String temp = new String(data);
+                                    showToast(temp);
+                                }
+
+                                @Override
+                                public void onFailure(int failCode, String info, BleDevice device) {
+
+                                }
+                            });
 
                         } catch (Exception e) {
                             Log.d("Error : ", e.getMessage());

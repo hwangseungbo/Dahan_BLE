@@ -1,5 +1,7 @@
 package org.techtown.dahan_ble;
 
+import static org.techtown.dahan_ble.MainActivity.comp_control;
+
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -48,7 +50,42 @@ public class MainFragment extends Fragment {
         } else {
             iv_bluetoothstate.setImageResource(R.drawable.ble_off);
         }
+        if(((MainActivity)getActivity()).comp_control) {
+            fr_sw_comp.setChecked(true);
+        } else {
+            fr_sw_comp.setChecked(false);
+        }
+        if(((MainActivity)getActivity()).wash_control) {
+            fr_sw_wash.setChecked(true);
+        } else {
+            fr_sw_wash.setChecked(false);
+        }
 
+
+
+
+
+        fr_sw_comp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(fr_sw_comp.isChecked()){
+                    ((MainActivity)getActivity()).comp_control=true;
+                } else {
+                    ((MainActivity)getActivity()).comp_control=false;
+                }
+            }
+        });
+
+        fr_sw_wash.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(fr_sw_wash.isChecked()){
+                    ((MainActivity)getActivity()).wash_control=true;
+                } else {
+                    ((MainActivity)getActivity()).wash_control=false;
+                }
+            }
+        });
 
         btn_setting.setOnClickListener(new View.OnClickListener() {
             @Override
