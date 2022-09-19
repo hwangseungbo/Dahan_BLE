@@ -6,6 +6,8 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.os.Handler;
+import android.os.Message;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -17,6 +19,12 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import org.w3c.dom.Text;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MainFragment extends Fragment {
 
@@ -65,13 +73,21 @@ public class MainFragment extends Fragment {
 
 
 
+
         fr_sw_comp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(fr_sw_comp.isChecked()){
                     ((MainActivity)getActivity()).comp_control=true;
+
+
+
                 } else {
                     ((MainActivity)getActivity()).comp_control=false;
+
+
+
+                    fr_tv_action_time.setText("00:00:00");
                 }
             }
         });
@@ -148,5 +164,6 @@ public class MainFragment extends Fragment {
 
         return rootView;
     }
+
 
 }

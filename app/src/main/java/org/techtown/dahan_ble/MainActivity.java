@@ -193,13 +193,13 @@ public class MainActivity extends AppCompatActivity {
                         try {
                             Data = new String(data, StandardCharsets.UTF_8);
                             Data.trim();
-                            //Log.d("Data : ", Data);
+                            Log.d("Rece Data : ", Data);// Receive 데이터 확인
 
                             // 데이터 파싱 시작
                             String[] Ddata = Data.split("_");   // ex) Ddata[0] = "$--DAHAN-MCU", Ddata[1] = "29.40,1,1,1.50,15:30:28,0*25"
                             Ddata[1].trim();
                             String[] DDdata = Ddata[1].split("\\*");    // ex) DDdata[0] = "29.40,1,1,1.50,15:30:28,0", DDdata[1] = "25"
-                            Log.d("DDdata : ", DDdata[0]);
+                            //Log.d("DDdata : ", DDdata[0]);
                             DDdata[0].trim();
                             DDdata[1] = DDdata[1].replaceAll("(\r\n|\r|\n|\n\r)", "");  // \r\n 또는 \n\r 또는 \n 또는 \r을 찾아 공백으로 치환
                             DDdata[1].trim();
@@ -248,7 +248,7 @@ public class MainActivity extends AppCompatActivity {
                                 @Override
                                 public void onWriteSuccess(byte[] data, BleDevice device) {
                                     String temp = new String(data);
-                                    showToast(temp);
+                                    Log.d("Send Data : " , temp);
                                 }
 
                                 @Override
