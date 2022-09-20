@@ -18,6 +18,8 @@ import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -44,7 +46,11 @@ import com.ficat.easyble.scan.BleScanCallback;
 
 
 import java.nio.charset.StandardCharsets;
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -74,10 +80,18 @@ public class MainActivity extends AppCompatActivity {
     public static String flow3;    // 유량계 최댓값 모니터링(0 = off, 1 = on, 뒤에 숫자는 주기[초])
     public static String flow3_default = "1,60";    //초기값(초기화시 이용)
     public static String cleanPower; // 세척강도
+    public static String cleanPower2; // 세척강도
+    public static String cleanPower3; // 세척강도
+    public static String cleanPower4; // 세척강도
     public static String cleanPower_default = "0.5";    //초기값(초기화시 이용)
+    public static String cleanPower2_default = "1.0";    //초기값(초기화시 이용)
+    public static String cleanPower3_default = "2.0";    //초기값(초기화시 이용)
+    public static String cleanPower4_default = "3.0";    //초기값(초기화시 이용)
+    public static String radioButtoncheck = "0";
+
     public static boolean comp_control = false; //컴프레셔 제어
     public static boolean wash_control = false; //배관세척 제어
-
+    public static boolean actionflag = false;
     private String connectedDeviceMacAddress;
 
     BleManager bleManager;
@@ -89,7 +103,8 @@ public class MainActivity extends AppCompatActivity {
     Dialog dialog;
 
     ImageView btn_NewDeviceSearch, bluetoothstate1 ;
-    TextView tv_connect, tv_flow, tv_comp_state;
+    TextView tv_connect, tv_flow, tv_comp_state, tv_washstate, tv_washpower, tv_acctime, tv_resetcheck;
+    TextView tv_runningtime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -146,6 +161,12 @@ public class MainActivity extends AppCompatActivity {
         tv_connect = findViewById(R.id.tv_connect);
         tv_flow = findViewById(R.id.tv_flow);
         tv_comp_state = findViewById(R.id.tv_comp_state);
+        tv_washstate = findViewById(R.id.tv_washstate);
+        tv_washpower = findViewById(R.id.tv_washpower);
+        tv_acctime = findViewById(R.id.tv_acctime);
+        tv_resetcheck = findViewById(R.id.tv_resetcheck);
+        tv_runningtime = findViewById(R.id.tv_runningtime);
+
 
         // BLE connect Callback
         BleConnectCallback bleConnectCallback = new BleConnectCallback() {
@@ -211,10 +232,19 @@ public class MainActivity extends AppCompatActivity {
                                 String[] DDDdata = DDdata[0].split(",");    // ex) DDDdata[0]="29.40" DDDdata[1]="1" DDDdata[2]="1" DDDdata[3]="1.50" DDDdata[4]="15:30:28" DDDdata[5]="0"
                                 double flow = Double.parseDouble(DDDdata[0]);
 
+                                //일단 받은 데이터는 메인액티비티의 텍스트뷰형식으로 전부 취합해둠
                                 //유량 데이터
                                 tv_flow.setText(DDDdata[0]);
                                 //컴프레셔전원상태
                                 tv_comp_state.setText(DDDdata[1]);
+                                //배관세척진행상태
+                                tv_washstate.setText(DDDdata[2]);
+                                //솔벨브온오프주기(배관세척강도?)
+                                tv_washpower.setText(DDDdata[3]);
+                                //배관 누적시간
+                                tv_acctime.setText(DDDdata[4]);
+                                //누적시간 리셋확인
+                                tv_resetcheck.setText(DDDdata[5]);
 
 
 
@@ -241,7 +271,22 @@ public class MainActivity extends AppCompatActivity {
                                 send_Data = send_Data + "0,";
                             }
                             //솔벨브온오프주기설정값 체크(cleanPower)
-                            send_Data = send_Data + cleanPower;
+                            if(radioButtoncheck.equals("0")) {
+                                send_Data = send_Data + cleanPower + ",";
+                            } else if(radioButtoncheck.equals("1")) {
+                                send_Data = send_Data + cleanPower2 + ",";
+                            } else if(radioButtoncheck.equals("2")) {
+                                send_Data = send_Data + cleanPower3 + ",";
+                            } else {
+                                send_Data = send_Data + cleanPower4 + ",";
+                            }
+
+
+                            //배관세척 동작시간 추가
+                            send_Data = send_Data + tv_runningtime.getText().toString() + ",";
+
+                            //누적시간 리셋
+
 
                             byte[] send = send_Data.getBytes();
                             bleManager.write(device, "0000FFE0-0000-1000-8000-00805F9B34FB", "0000FFE1-0000-1000-8000-00805F9B34FB", send, new BleWriteCallback() {
@@ -533,6 +578,9 @@ public class MainActivity extends AppCompatActivity {
         editor.putString("flow2", flow2);
         editor.putString("flow3", flow3);
         editor.putString("cleanPower", cleanPower);
+        editor.putString("cleanPower2", cleanPower2);
+        editor.putString("cleanPower3", cleanPower3);
+        editor.putString("cleanPower4", cleanPower4);
 
         // apply, commit을 안하면 병경된 내용이 저장되지 않음
         editor.apply();
@@ -549,10 +597,10 @@ public class MainActivity extends AppCompatActivity {
         flow2 = appData.getString("flow2","1,1");    // 유량계 최소값 모니터링(0 = off, 1 = on, 뒤에 숫자는 주기[초])
         flow3 = appData.getString("flow3","1,60");    // 유량계 최댓값 모니터링(0 = off, 1 = on, 뒤에 숫자는 주기[초])
         cleanPower = appData.getString("cleanPower","0.5");   // 세척강도
+        cleanPower2 = appData.getString("cleanPower2","1.0");   // 세척강도2
+        cleanPower3 = appData.getString("cleanPower3","2.0");   // 세척강도3
+        cleanPower4 = appData.getString("cleanPower4","3.0");   // 세척강도3
 
-
-        showToast("mode:" + mode + " autocomp:" + autoCompressure + " flow1:" + flow1 +
-                " flow2:" + flow2 + " flow3:" + flow3 + " cleanPower:" + cleanPower);
 
     }
 
@@ -596,6 +644,47 @@ public class MainActivity extends AppCompatActivity {
 
             return itemView;
         }
+    }
+
+    public void ShowTimeMethod(String actionTime) {
+        final Handler handler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                SimpleDateFormat simple = new SimpleDateFormat("HH:mm:ss");
+                Date date = new Date();
+                String time = simple.format(date);
+
+                try {
+                    Date ActionStartTime = simple.parse(actionTime);
+                    Date CurrentTime = simple.parse(time);
+
+                    // 한국시간은 9시간 보정을 받기때문에 9시간을 밀리세크로 계산해서 빼준다.
+                    long seconds = (CurrentTime.getTime()-ActionStartTime.getTime()) - (long)(32400000);
+
+                    String runtime = (String) simple.format(new Timestamp(seconds));
+
+                    tv_runningtime.setText(runtime);
+
+
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        Runnable task = new Runnable() {
+            @Override
+            public void run() {
+                while(actionflag) {
+                    try{
+                        Thread.sleep(1000);
+                    }catch (InterruptedException e){}
+                    handler.sendEmptyMessage(1); //핸들러 호출 = 시간 갱신
+                }
+            }
+        };
+        Thread thread = new Thread(task);
+        thread.start();
     }
 
     @Override

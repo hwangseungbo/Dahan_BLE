@@ -200,9 +200,9 @@
                 android:layout_height="76px"
                 android:layout_marginStart="48dp"
                 android:layout_marginTop="130dp"
-                android:background="@drawable/time_button_pressed"
-                android:text="0.5"
-                android:textColor="#FFFFFF"
+                android:background="@drawable/time_button_unpressed"
+                android:enabled="false"
+                android:textColor="#000000"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/fr_sw_flow3" />
 
@@ -213,8 +213,8 @@
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="130dp"
                 android:background="@drawable/time_button_unpressed"
-                android:text="1"
-                android:textColor="#FFFFFF"
+                android:enabled="false"
+                android:textColor="#000000"
                 app:layout_constraintStart_toEndOf="@+id/fr_btn_power1"
                 app:layout_constraintTop_toBottomOf="@+id/fr_sw_flow3" />
 
@@ -225,8 +225,8 @@
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="130dp"
                 android:background="@drawable/time_button_unpressed"
-                android:text="2"
-                android:textColor="#FFFFFF"
+                android:enabled="false"
+                android:textColor="#000000"
                 app:layout_constraintStart_toEndOf="@+id/fr_btn_power2"
                 app:layout_constraintTop_toBottomOf="@+id/fr_sw_flow3" />
 
@@ -237,10 +237,58 @@
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="130dp"
                 android:background="@drawable/time_button_unpressed"
-                android:text="3"
-                android:textColor="#FFFFFF"
+                android:enabled="false"
+                android:textColor="#000000"
                 app:layout_constraintStart_toEndOf="@+id/fr_btn_power3"
                 app:layout_constraintTop_toBottomOf="@+id/fr_sw_flow3" />
+
+            <EditText
+                android:id="@+id/et_cleanpower"
+                android:layout_width="160px"
+                android:layout_height="76px"
+                android:background="@android:color/transparent"
+                android:ems="10"
+                android:gravity="center"
+                android:inputType="textPersonName"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="@+id/fr_btn_power1"
+                app:layout_constraintStart_toStartOf="@+id/fr_btn_power1" />
+
+            <EditText
+                android:id="@+id/et_cleanpower2"
+                android:layout_width="160px"
+                android:layout_height="76px"
+                android:background="@android:color/transparent"
+                android:ems="10"
+                android:gravity="center"
+                android:inputType="textPersonName"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="@+id/fr_btn_power1"
+                app:layout_constraintStart_toStartOf="@+id/fr_btn_power2" />
+
+            <EditText
+                android:id="@+id/et_cleanpower3"
+                android:layout_width="160px"
+                android:layout_height="76px"
+                android:background="@android:color/transparent"
+                android:ems="10"
+                android:gravity="center"
+                android:inputType="textPersonName"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="@+id/fr_btn_power1"
+                app:layout_constraintStart_toStartOf="@+id/fr_btn_power3" />
+
+            <EditText
+                android:id="@+id/et_cleanpower4"
+                android:layout_width="160px"
+                android:layout_height="76px"
+                android:background="@android:color/transparent"
+                android:ems="10"
+                android:gravity="center"
+                android:inputType="textPersonName"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="@+id/fr_btn_power1"
+                app:layout_constraintStart_toStartOf="@+id/fr_btn_power4" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 </FrameLayout>

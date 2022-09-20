@@ -35,31 +35,46 @@
         app:layout_constraintTop_toBottomOf="@+id/tv_flow" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/tv_washstate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="TextView"
-        android:textColor="#00000000"
-        app:layout_constraintStart_toStartOf="@+id/tv_connect"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_comp_state" />
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/tv_washpower"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="TextView"
-        android:textColor="#00000000"
-        app:layout_constraintStart_toStartOf="@+id/tv_connect"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_washstate" />
 
     <TextView
-        android:id="@+id/textView5"
+        android:id="@+id/tv_acctime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="00:00:00"
+        android:textColor="#00000000"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_washpower" />
+
+    <TextView
+        android:id="@+id/tv_resetcheck"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="TextView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_acctime" />
+
+    <TextView
+        android:id="@+id/tv_runningtime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="00:00:00"
         android:textColor="#00000000"
-        app:layout_constraintStart_toStartOf="@+id/tv_connect"
-        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+        app:layout_constraintStart_toEndOf="@+id/tv_connect"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <FrameLayout
         android:id="@+id/container"

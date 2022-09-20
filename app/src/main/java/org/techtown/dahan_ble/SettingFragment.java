@@ -23,7 +23,6 @@ public class SettingFragment extends Fragment {
     public String flow1_temp;
     public String flow2_temp;
     public String flow3_temp;
-    public String cleanPower_temp;
 
 
     @Override
@@ -43,15 +42,15 @@ public class SettingFragment extends Fragment {
         EditText fr_et_flow1 = (EditText) rootView.findViewById(R.id.fr_et_flow1);
         EditText fr_et_flow2 = (EditText) rootView.findViewById(R.id.fr_et_flow2);
         EditText fr_et_flow3 = (EditText) rootView.findViewById(R.id.fr_et_flow3);
+        EditText et_cleanpower = (EditText) rootView.findViewById(R.id.et_cleanpower);
+        EditText et_cleanpower2 = (EditText) rootView.findViewById(R.id.et_cleanpower2);
+        EditText et_cleanpower3 = (EditText) rootView.findViewById(R.id.et_cleanpower3);
+        EditText et_cleanpower4 = (EditText) rootView.findViewById(R.id.et_cleanpower4);
         Button fr_btn_save = (Button) rootView.findViewById(R.id.fr_btn_save);
         Button fr_btn_cancel = (Button) rootView.findViewById(R.id.fr_btn_cancel);
         Button fr_btn_analog = (Button) rootView.findViewById(R.id.fr_btn_analog);
         Button fr_btn_digital = (Button) rootView.findViewById(R.id.fr_btn_digital);
         Button btn_back = rootView.findViewById(R.id.btn_back);
-        Button fr_btn_power1 = (Button) rootView.findViewById(R.id.fr_btn_power1);
-        Button fr_btn_power2 = (Button) rootView.findViewById(R.id.fr_btn_power2);
-        Button fr_btn_power3 = (Button) rootView.findViewById(R.id.fr_btn_power3);
-        Button fr_btn_power4 = (Button) rootView.findViewById(R.id.fr_btn_power4);
         Button fr_btn_flowreset = (Button) rootView.findViewById(R.id.fr_btn_flowreset);
         Button fr_btn_appreset = (Button) rootView.findViewById(R.id.fr_btn_appreset);
 
@@ -63,7 +62,10 @@ public class SettingFragment extends Fragment {
         flow1_temp = ((MainActivity)getActivity()).flow1;
         flow2_temp = ((MainActivity)getActivity()).flow2;
         flow3_temp = ((MainActivity)getActivity()).flow3;
-        cleanPower_temp = ((MainActivity)getActivity()).cleanPower;
+        et_cleanpower.setText(((MainActivity)getActivity()).cleanPower);
+        et_cleanpower2.setText(((MainActivity)getActivity()).cleanPower2);
+        et_cleanpower3.setText(((MainActivity)getActivity()).cleanPower3);
+        et_cleanpower4.setText(((MainActivity)getActivity()).cleanPower4);
         if(tv_connect.getText().toString().equals("true")) {
             iv_bluetoothstate2.setImageResource(R.drawable.ble_on);
         } else {
@@ -127,37 +129,6 @@ public class SettingFragment extends Fragment {
             fr_et_flow3.setText(flow3[1]);
             fr_et_flow3.setEnabled(true);
         }
-        // <배관 세척 강도>
-        if(((MainActivity)getActivity()).cleanPower.equals("0.5")){
-            fr_btn_power1.setBackgroundResource(R.drawable.time_button_pressed);
-            fr_btn_power2.setBackgroundResource(R.drawable.time_button_unpressed);
-            fr_btn_power3.setBackgroundResource(R.drawable.time_button_unpressed);
-            fr_btn_power4.setBackgroundResource(R.drawable.time_button_unpressed);
-        }else if(((MainActivity)getActivity()).cleanPower.equals("1.0")) {
-            fr_btn_power1.setBackgroundResource(R.drawable.time_button_unpressed);
-            fr_btn_power2.setBackgroundResource(R.drawable.time_button_pressed);
-            fr_btn_power3.setBackgroundResource(R.drawable.time_button_unpressed);
-            fr_btn_power4.setBackgroundResource(R.drawable.time_button_unpressed);
-        }else if(((MainActivity)getActivity()).cleanPower.equals("2.0")) {
-            fr_btn_power1.setBackgroundResource(R.drawable.time_button_unpressed);
-            fr_btn_power2.setBackgroundResource(R.drawable.time_button_unpressed);
-            fr_btn_power3.setBackgroundResource(R.drawable.time_button_pressed);
-            fr_btn_power4.setBackgroundResource(R.drawable.time_button_unpressed);
-        }else {
-            fr_btn_power1.setBackgroundResource(R.drawable.time_button_unpressed);
-            fr_btn_power2.setBackgroundResource(R.drawable.time_button_unpressed);
-            fr_btn_power3.setBackgroundResource(R.drawable.time_button_unpressed);
-            fr_btn_power4.setBackgroundResource(R.drawable.time_button_pressed);
-        }
-
-
-
-
-
-
-
-
-
 
 
 
@@ -234,46 +205,6 @@ public class SettingFragment extends Fragment {
             }
         });
 
-        fr_btn_power1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                fr_btn_power1.setBackgroundResource(R.drawable.time_button_pressed);
-                fr_btn_power2.setBackgroundResource(R.drawable.time_button_unpressed);
-                fr_btn_power3.setBackgroundResource(R.drawable.time_button_unpressed);
-                fr_btn_power4.setBackgroundResource(R.drawable.time_button_unpressed);
-                cleanPower_temp = "0.5";
-            }
-        });
-        fr_btn_power2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                fr_btn_power1.setBackgroundResource(R.drawable.time_button_unpressed);
-                fr_btn_power2.setBackgroundResource(R.drawable.time_button_pressed);
-                fr_btn_power3.setBackgroundResource(R.drawable.time_button_unpressed);
-                fr_btn_power4.setBackgroundResource(R.drawable.time_button_unpressed);
-                cleanPower_temp = "1.0";
-            }
-        });
-        fr_btn_power3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                fr_btn_power1.setBackgroundResource(R.drawable.time_button_unpressed);
-                fr_btn_power2.setBackgroundResource(R.drawable.time_button_unpressed);
-                fr_btn_power3.setBackgroundResource(R.drawable.time_button_pressed);
-                fr_btn_power4.setBackgroundResource(R.drawable.time_button_unpressed);
-                cleanPower_temp = "2.0";
-            }
-        });
-        fr_btn_power4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                fr_btn_power1.setBackgroundResource(R.drawable.time_button_unpressed);
-                fr_btn_power2.setBackgroundResource(R.drawable.time_button_unpressed);
-                fr_btn_power3.setBackgroundResource(R.drawable.time_button_unpressed);
-                fr_btn_power4.setBackgroundResource(R.drawable.time_button_pressed);
-                cleanPower_temp = "3.0";
-            }
-        });
 
         fr_btn_flowreset.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -291,6 +222,9 @@ public class SettingFragment extends Fragment {
                 ((MainActivity)getActivity()).flow2 = ((MainActivity)getActivity()).flow2_default;
                 ((MainActivity)getActivity()).flow3 = ((MainActivity)getActivity()).flow3_default;
                 ((MainActivity)getActivity()).cleanPower = ((MainActivity)getActivity()).cleanPower_default;
+                ((MainActivity)getActivity()).cleanPower2 = ((MainActivity)getActivity()).cleanPower2_default;
+                ((MainActivity)getActivity()).cleanPower3 = ((MainActivity)getActivity()).cleanPower3_default;
+                ((MainActivity)getActivity()).cleanPower4 = ((MainActivity)getActivity()).cleanPower4_default;
                 ((MainActivity)getActivity()).save();
 
                 // UI 초기화
@@ -351,30 +285,10 @@ public class SettingFragment extends Fragment {
                     fr_et_flow3.setText(flow3[1]);
                     fr_et_flow3.setEnabled(true);
                 }
-                // <배관 세척 강도>
-                if(((MainActivity)getActivity()).cleanPower.equals("0.5")){
-                    fr_btn_power1.setBackgroundResource(R.drawable.time_button_pressed);
-                    fr_btn_power2.setBackgroundResource(R.drawable.time_button_unpressed);
-                    fr_btn_power3.setBackgroundResource(R.drawable.time_button_unpressed);
-                    fr_btn_power4.setBackgroundResource(R.drawable.time_button_unpressed);
-                }else if(((MainActivity)getActivity()).cleanPower.equals("1.0")) {
-                    fr_btn_power1.setBackgroundResource(R.drawable.time_button_unpressed);
-                    fr_btn_power2.setBackgroundResource(R.drawable.time_button_pressed);
-                    fr_btn_power3.setBackgroundResource(R.drawable.time_button_unpressed);
-                    fr_btn_power4.setBackgroundResource(R.drawable.time_button_unpressed);
-                }else if(((MainActivity)getActivity()).cleanPower.equals("2.0")) {
-                    fr_btn_power1.setBackgroundResource(R.drawable.time_button_unpressed);
-                    fr_btn_power2.setBackgroundResource(R.drawable.time_button_unpressed);
-                    fr_btn_power3.setBackgroundResource(R.drawable.time_button_pressed);
-                    fr_btn_power4.setBackgroundResource(R.drawable.time_button_unpressed);
-                }else {
-                    fr_btn_power1.setBackgroundResource(R.drawable.time_button_unpressed);
-                    fr_btn_power2.setBackgroundResource(R.drawable.time_button_unpressed);
-                    fr_btn_power3.setBackgroundResource(R.drawable.time_button_unpressed);
-                    fr_btn_power4.setBackgroundResource(R.drawable.time_button_pressed);
-                }
-
-
+                et_cleanpower.setText(((MainActivity)getActivity()).cleanPower);
+                et_cleanpower2.setText(((MainActivity)getActivity()).cleanPower2);
+                et_cleanpower3.setText(((MainActivity)getActivity()).cleanPower3);
+                et_cleanpower4.setText(((MainActivity)getActivity()).cleanPower4);
 
                 ((MainActivity)getActivity()).showToast("초기화 되었습니다.");
             }
@@ -448,29 +362,6 @@ public class SettingFragment extends Fragment {
                     fr_et_flow3.setText(flow3[1]);
                     fr_et_flow3.setEnabled(true);
                 }
-                // <배관 세척 강도>
-                if(((MainActivity)getActivity()).cleanPower.equals("0.5")){
-                    fr_btn_power1.setBackgroundResource(R.drawable.time_button_pressed);
-                    fr_btn_power2.setBackgroundResource(R.drawable.time_button_unpressed);
-                    fr_btn_power3.setBackgroundResource(R.drawable.time_button_unpressed);
-                    fr_btn_power4.setBackgroundResource(R.drawable.time_button_unpressed);
-                }else if(((MainActivity)getActivity()).cleanPower.equals("1.0")) {
-                    fr_btn_power1.setBackgroundResource(R.drawable.time_button_unpressed);
-                    fr_btn_power2.setBackgroundResource(R.drawable.time_button_pressed);
-                    fr_btn_power3.setBackgroundResource(R.drawable.time_button_unpressed);
-                    fr_btn_power4.setBackgroundResource(R.drawable.time_button_unpressed);
-                }else if(((MainActivity)getActivity()).cleanPower.equals("2.0")) {
-                    fr_btn_power1.setBackgroundResource(R.drawable.time_button_unpressed);
-                    fr_btn_power2.setBackgroundResource(R.drawable.time_button_unpressed);
-                    fr_btn_power3.setBackgroundResource(R.drawable.time_button_pressed);
-                    fr_btn_power4.setBackgroundResource(R.drawable.time_button_unpressed);
-                }else {
-                    fr_btn_power1.setBackgroundResource(R.drawable.time_button_unpressed);
-                    fr_btn_power2.setBackgroundResource(R.drawable.time_button_unpressed);
-                    fr_btn_power3.setBackgroundResource(R.drawable.time_button_unpressed);
-                    fr_btn_power4.setBackgroundResource(R.drawable.time_button_pressed);
-                }
-
 
                 mainActivity.onFragmentChanged(1);
             }
@@ -507,7 +398,10 @@ public class SettingFragment extends Fragment {
                 ((MainActivity)getActivity()).flow1 = flow1_temp;
                 ((MainActivity)getActivity()).flow2 = flow2_temp;
                 ((MainActivity)getActivity()).flow3 = flow3_temp;
-                ((MainActivity)getActivity()).cleanPower = cleanPower_temp;
+                ((MainActivity)getActivity()).cleanPower = et_cleanpower.getText().toString();
+                ((MainActivity)getActivity()).cleanPower2 = et_cleanpower2.getText().toString();
+                ((MainActivity)getActivity()).cleanPower3 = et_cleanpower3.getText().toString();
+                ((MainActivity)getActivity()).cleanPower4 = et_cleanpower4.getText().toString();
 
                 ((MainActivity)getActivity()).save();
 
@@ -568,28 +462,11 @@ public class SettingFragment extends Fragment {
                     fr_et_flow3.setText(flow3[1]);
                     fr_et_flow3.setEnabled(true);
                 }
-                // <배관 세척 강도>
-                if(((MainActivity)getActivity()).cleanPower.equals("0.5")){
-                    fr_btn_power1.setBackgroundResource(R.drawable.time_button_pressed);
-                    fr_btn_power2.setBackgroundResource(R.drawable.time_button_unpressed);
-                    fr_btn_power3.setBackgroundResource(R.drawable.time_button_unpressed);
-                    fr_btn_power4.setBackgroundResource(R.drawable.time_button_unpressed);
-                }else if(((MainActivity)getActivity()).cleanPower.equals("1.0")) {
-                    fr_btn_power1.setBackgroundResource(R.drawable.time_button_unpressed);
-                    fr_btn_power2.setBackgroundResource(R.drawable.time_button_pressed);
-                    fr_btn_power3.setBackgroundResource(R.drawable.time_button_unpressed);
-                    fr_btn_power4.setBackgroundResource(R.drawable.time_button_unpressed);
-                }else if(((MainActivity)getActivity()).cleanPower.equals("2.0")) {
-                    fr_btn_power1.setBackgroundResource(R.drawable.time_button_unpressed);
-                    fr_btn_power2.setBackgroundResource(R.drawable.time_button_unpressed);
-                    fr_btn_power3.setBackgroundResource(R.drawable.time_button_pressed);
-                    fr_btn_power4.setBackgroundResource(R.drawable.time_button_unpressed);
-                }else {
-                    fr_btn_power1.setBackgroundResource(R.drawable.time_button_unpressed);
-                    fr_btn_power2.setBackgroundResource(R.drawable.time_button_unpressed);
-                    fr_btn_power3.setBackgroundResource(R.drawable.time_button_unpressed);
-                    fr_btn_power4.setBackgroundResource(R.drawable.time_button_pressed);
-                }
+                et_cleanpower.setText(((MainActivity)getActivity()).cleanPower);
+                et_cleanpower2.setText(((MainActivity)getActivity()).cleanPower2);
+                et_cleanpower3.setText(((MainActivity)getActivity()).cleanPower3);
+                et_cleanpower4.setText(((MainActivity)getActivity()).cleanPower4);
+
 
                 ((MainActivity)getActivity()).showToast( "저장 되었습니다.");
             }
