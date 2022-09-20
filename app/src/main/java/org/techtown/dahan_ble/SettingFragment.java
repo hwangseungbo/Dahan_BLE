@@ -209,7 +209,8 @@ public class SettingFragment extends Fragment {
         fr_btn_flowreset.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                ((MainActivity)getActivity()).flowresetflag=true;
+                ((MainActivity)getActivity()).showToast("누적시간 초기화 요청");
             }
         });
 
@@ -362,6 +363,10 @@ public class SettingFragment extends Fragment {
                     fr_et_flow3.setText(flow3[1]);
                     fr_et_flow3.setEnabled(true);
                 }
+                et_cleanpower.setText(((MainActivity)getActivity()).cleanPower);
+                et_cleanpower2.setText(((MainActivity)getActivity()).cleanPower2);
+                et_cleanpower3.setText(((MainActivity)getActivity()).cleanPower3);
+                et_cleanpower4.setText(((MainActivity)getActivity()).cleanPower4);
 
                 mainActivity.onFragmentChanged(1);
             }

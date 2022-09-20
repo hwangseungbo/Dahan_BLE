@@ -23,6 +23,7 @@ import android.os.Message;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.util.Xml;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -89,6 +90,8 @@ public class MainActivity extends AppCompatActivity {
     public static String cleanPower4_default = "3.0";    //초기값(초기화시 이용)
     public static String radioButtoncheck = "0";
 
+    public static boolean flowresetflag = false; //누적시간 리셋요청여부
+    public static int resetcount = 10;
     public static boolean comp_control = false; //컴프레셔 제어
     public static boolean wash_control = false; //배관세척 제어
     public static boolean actionflag = false;
@@ -239,12 +242,15 @@ public class MainActivity extends AppCompatActivity {
                                 tv_comp_state.setText(DDDdata[1]);
                                 //배관세척진행상태
                                 tv_washstate.setText(DDDdata[2]);
-                                //솔벨브온오프주기(배관세척강도?)
+                                //솔벨브온오프주기(배관세척강도)
                                 tv_washpower.setText(DDDdata[3]);
                                 //배관 누적시간
                                 tv_acctime.setText(DDDdata[4]);
                                 //누적시간 리셋확인
                                 tv_resetcheck.setText(DDDdata[5]);
+                                if(DDDdata[5].equals("1")) {
+                                    flowresetflag = false;
+                                }
 
 
 
@@ -257,6 +263,7 @@ public class MainActivity extends AppCompatActivity {
                             // 컴프레셔전원명령,배관세척명령,솔벨브온오프주기설정값,배관세척 동작시간, 누적시간리셋여부 순이다.
                             //String send_Data = "$--DAHAN-AND_1,1,0.5,35:12,1*15\r\n";
                             String send_Data = "$--DAHAN-AND_";
+
 
                             //컴프레셔 전원명령 체크
                             if(comp_control){
@@ -281,14 +288,21 @@ public class MainActivity extends AppCompatActivity {
                                 send_Data = send_Data + cleanPower4 + ",";
                             }
 
-
                             //배관세척 동작시간 추가
                             send_Data = send_Data + tv_runningtime.getText().toString() + ",";
 
                             //누적시간 리셋
+                            if(flowresetflag) {
+                                send_Data = send_Data + "1";
+                            }else {
+                                send_Data = send_Data + "0";
+                            }
+
+                            send_Data = send_Data + "\r\n";
 
 
                             byte[] send = send_Data.getBytes();
+
                             bleManager.write(device, "0000FFE0-0000-1000-8000-00805F9B34FB", "0000FFE1-0000-1000-8000-00805F9B34FB", send, new BleWriteCallback() {
                                 @Override
                                 public void onWriteSuccess(byte[] data, BleDevice device) {
