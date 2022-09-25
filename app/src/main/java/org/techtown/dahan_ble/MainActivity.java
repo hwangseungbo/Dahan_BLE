@@ -250,6 +250,7 @@ public class MainActivity extends AppCompatActivity {
                                 tv_resetcheck.setText(DDDdata[5]);
                                 if(DDDdata[5].equals("1")) {
                                     flowresetflag = false;
+                                    tv_runningtime.setText("00:00:00");
                                 }
 
 
@@ -291,7 +292,7 @@ public class MainActivity extends AppCompatActivity {
                             //배관세척 동작시간 추가
                             send_Data = send_Data + tv_runningtime.getText().toString() + ",";
 
-                            //누적시간 리셋
+                            //누적시간 리셋   셋팅프래그먼트에서 초기화 요청시에 flowresetflag가 true로 변한다.
                             if(flowresetflag) {
                                 send_Data = send_Data + "1";
                             }else {
