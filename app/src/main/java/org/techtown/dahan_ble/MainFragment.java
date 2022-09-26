@@ -44,6 +44,8 @@ public class MainFragment extends Fragment {
         TextView tv_comp_state = super.getActivity().findViewById(R.id.tv_comp_state);
         TextView tv_runningtime = super.getActivity().findViewById(R.id.tv_runningtime);
         TextView tv_acctime = super.getActivity().findViewById(R.id.tv_acctime);
+        TextView tv_washstate = super.getActivity().findViewById(R.id.tv_washstate);
+
 
         //프레그먼트의 위젯
         TextView fr_tv_flow = rootView.findViewById(R.id.fr_tv_flow);
@@ -217,6 +219,45 @@ public class MainFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 fr_tv_acc_time.setText(tv_acctime.getText().toString());
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
+        tv_comp_state.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(tv_comp_state.getText().toString().equals("0") && tv_washstate.getText().toString().equals("0")) {
+                    fr_iv_act.setImageResource(R.drawable.action_state_nosign);
+                    fr_iv_stop.setImageResource(R.drawable.action_state_stop);
+                }else if(tv_comp_state.getText().toString().equals("1") && tv_washstate.getText().toString().equals("0")) {
+                    fr_iv_act.setImageResource(R.drawable.action_state_post);
+                    fr_iv_stop.setImageResource(R.drawable.action_state_nosign);
+                }
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
+        tv_washstate.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(tv_washstate.getText().toString().equals("0") && tv_comp_state.getText().toString().equals("0")) {
+                    fr_iv_act.setImageResource(R.drawable.action_state_nosign);
+                    fr_iv_stop.setImageResource(R.drawable.action_state_stop);
+                }else if(tv_washstate.getText().toString().equals("1") && tv_comp_state.getText().toString().equals("1")) {
+                    fr_iv_act.setImageResource(R.drawable.action_state_act);
+                    fr_iv_stop.setImageResource(R.drawable.action_state_nosign);
+                }
             }
             @Override
             public void afterTextChanged(Editable s) {

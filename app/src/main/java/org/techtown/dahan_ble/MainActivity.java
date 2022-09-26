@@ -70,6 +70,9 @@ public class MainActivity extends AppCompatActivity {
     // 어플리케이션 설정파일 관련 (_default 가 붙은 값은 초기화시 초기값으로 이용)
     private SharedPreferences appData;
 
+    public static String devName;
+    public static String devMacadd;
+
     public static String mode;  // 메인화면 테마 설정(0 = 디지털 모드, 1 = 아날로그 모드)
     public static String mode_default = "0"; //초기값(초기화시 이용)
     public static String autoCompressure;   // 컴프레셔 자동동작(0 = 자동동작 x, 1 = 자동동작 o)
@@ -238,21 +241,25 @@ public class MainActivity extends AppCompatActivity {
                                 //일단 받은 데이터는 메인액티비티의 텍스트뷰형식으로 전부 취합해둠
                                 //유량 데이터
                                 tv_flow.setText(DDDdata[0]);
+
                                 //컴프레셔전원상태
                                 tv_comp_state.setText(DDDdata[1]);
+
                                 //배관세척진행상태
                                 tv_washstate.setText(DDDdata[2]);
+
                                 //솔벨브온오프주기(배관세척강도)
                                 tv_washpower.setText(DDDdata[3]);
+
                                 //배관 누적시간
                                 tv_acctime.setText(DDDdata[4]);
+
                                 //누적시간 리셋확인
                                 tv_resetcheck.setText(DDDdata[5]);
                                 if(DDDdata[5].equals("1")) {
                                     flowresetflag = false;
                                     tv_runningtime.setText("00:00:00");
                                 }
-
 
 
                             } else {
@@ -532,6 +539,8 @@ public class MainActivity extends AppCompatActivity {
                                 connectedDeviceMacAddress = item.getMac();
                                 bleManager.connect(connectedDeviceMacAddress, bleConnectCallback);
 
+                                devName = item.getName();
+                                devMacadd = item.getMac();
                             }
                         });
 

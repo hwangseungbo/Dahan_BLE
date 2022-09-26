@@ -1,5 +1,8 @@
 package org.techtown.dahan_ble;
 
+import android.app.Dialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -9,11 +12,14 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 
 public class SettingFragment extends Fragment {
@@ -23,6 +29,7 @@ public class SettingFragment extends Fragment {
     public String flow1_temp;
     public String flow2_temp;
     public String flow3_temp;
+    Dialog dialog;
 
 
     @Override
@@ -30,6 +37,8 @@ public class SettingFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_setting, container, false);
+
+
 
 
         //프래그먼트의 위젯
@@ -53,7 +62,8 @@ public class SettingFragment extends Fragment {
         Button btn_back = rootView.findViewById(R.id.btn_back);
         Button fr_btn_flowreset = (Button) rootView.findViewById(R.id.fr_btn_flowreset);
         Button fr_btn_appreset = (Button) rootView.findViewById(R.id.fr_btn_appreset);
-
+        TextView fr_setting_devName = (TextView) rootView.findViewById(R.id.fr_setting_devName);
+        TextView fr_setting_macAdd = (TextView) rootView.findViewById(R.id.fr_setting_macAdd);
 
 
         //이니셜라이징
@@ -62,6 +72,8 @@ public class SettingFragment extends Fragment {
         flow1_temp = ((MainActivity)getActivity()).flow1;
         flow2_temp = ((MainActivity)getActivity()).flow2;
         flow3_temp = ((MainActivity)getActivity()).flow3;
+        fr_setting_devName.setText("기기명 : " + ((MainActivity)getActivity()).devName);
+        fr_setting_macAdd.setText("맥주소 : " + ((MainActivity)getActivity()).devMacadd);
         et_cleanpower.setText(((MainActivity)getActivity()).cleanPower);
         et_cleanpower2.setText(((MainActivity)getActivity()).cleanPower2);
         et_cleanpower3.setText(((MainActivity)getActivity()).cleanPower3);
@@ -214,84 +226,110 @@ public class SettingFragment extends Fragment {
             }
         });
 
+        //리셋버튼 클릭 이벤트
         fr_btn_appreset.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((MainActivity)getActivity()).mode = ((MainActivity)getActivity()).mode_default;
-                ((MainActivity)getActivity()).autoCompressure = ((MainActivity)getActivity()).autoCompressure_default;
-                ((MainActivity)getActivity()).flow1 = ((MainActivity)getActivity()).flow1_default;
-                ((MainActivity)getActivity()).flow2 = ((MainActivity)getActivity()).flow2_default;
-                ((MainActivity)getActivity()).flow3 = ((MainActivity)getActivity()).flow3_default;
-                ((MainActivity)getActivity()).cleanPower = ((MainActivity)getActivity()).cleanPower_default;
-                ((MainActivity)getActivity()).cleanPower2 = ((MainActivity)getActivity()).cleanPower2_default;
-                ((MainActivity)getActivity()).cleanPower3 = ((MainActivity)getActivity()).cleanPower3_default;
-                ((MainActivity)getActivity()).cleanPower4 = ((MainActivity)getActivity()).cleanPower4_default;
-                ((MainActivity)getActivity()).save();
+                //팝업창 띄우기
+                dialog = new Dialog(getContext(), android.R.style.Theme_Material_Light_Dialog);
+                dialog.setContentView(R.layout.setting_dialog);
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
 
-                // UI 초기화
-                // 설정파일값을 확인하여 UI 초기화
-                // <메인화면 테마설정>
-                if( ((MainActivity)getActivity()).mode.equals("0") ){
-                    // mode 값이 0일 경우 디지털 방식
-                    fr_btn_analog.setBackgroundResource(R.drawable.analog_button_off);
-                    fr_btn_digital.setBackgroundResource(R.drawable.digital_button_on);
+                Button btn_reset_yes = dialog.findViewById(R.id.btn_reset_yes);
+                Button btn_reset_no = dialog.findViewById(R.id.btn_reset_no);
 
-                } else if ( ((MainActivity)getActivity()).mode.equals("1") ) {
-                    // mode 값이 1일 경우 아날로그 방식
-                    fr_btn_analog.setBackgroundResource(R.drawable.analog_button_on);
-                    fr_btn_digital.setBackgroundResource(R.drawable.digital_button_off);
-                }
-                // <컴프레셔 자동 동작 설정>
-                if( ((MainActivity)getActivity()).autoCompressure.equals("0") ){
-                    fr_sw_autocomp.setChecked(false);
-                }else if( ((MainActivity)getActivity()).autoCompressure.equals("1") ){
-                    fr_sw_autocomp.setChecked(true);
-                }
-                // <알람설정>
-                String[] flow1 = ((MainActivity)getActivity()).flow1.split(",");
-                String[] flow2 = ((MainActivity)getActivity()).flow2.split(",");
-                String[] flow3 = ((MainActivity)getActivity()).flow3.split(",");
-                if( flow1[0].equals("0") ) {
-                    fr_sw_flow1.setChecked(false);
-                    fr_et_flow1.setBackgroundResource(R.drawable.time_button_unpressed);
-                    fr_et_flow1.setText(flow1[1]);
-                    fr_et_flow1.setEnabled(false);
-                } else {
-                    fr_sw_flow1.setChecked(true);
-                    fr_et_flow1.setBackgroundResource(R.drawable.time_button_pressed);
-                    fr_et_flow1.setText(flow1[1]);
-                    fr_et_flow1.setEnabled(true);
-                }
+                btn_reset_yes.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ((MainActivity)getActivity()).mode = ((MainActivity)getActivity()).mode_default;
+                        ((MainActivity)getActivity()).autoCompressure = ((MainActivity)getActivity()).autoCompressure_default;
+                        ((MainActivity)getActivity()).flow1 = ((MainActivity)getActivity()).flow1_default;
+                        ((MainActivity)getActivity()).flow2 = ((MainActivity)getActivity()).flow2_default;
+                        ((MainActivity)getActivity()).flow3 = ((MainActivity)getActivity()).flow3_default;
+                        ((MainActivity)getActivity()).cleanPower = ((MainActivity)getActivity()).cleanPower_default;
+                        ((MainActivity)getActivity()).cleanPower2 = ((MainActivity)getActivity()).cleanPower2_default;
+                        ((MainActivity)getActivity()).cleanPower3 = ((MainActivity)getActivity()).cleanPower3_default;
+                        ((MainActivity)getActivity()).cleanPower4 = ((MainActivity)getActivity()).cleanPower4_default;
+                        ((MainActivity)getActivity()).save();
 
-                if( flow2[0].equals("0") ) {
-                    fr_sw_flow2.setChecked(false);
-                    fr_et_flow2.setBackgroundResource(R.drawable.time_button_unpressed);
-                    fr_et_flow2.setText(flow2[1]);
-                    fr_et_flow2.setEnabled(false);
-                } else {
-                    fr_sw_flow2.setChecked(true);
-                    fr_et_flow2.setBackgroundResource(R.drawable.time_button_pressed);
-                    fr_et_flow2.setText(flow2[1]);
-                    fr_et_flow2.setEnabled(true);
-                }
+                        // UI 초기화
+                        // 설정파일값을 확인하여 UI 초기화
+                        // <메인화면 테마설정>
+                        if( ((MainActivity)getActivity()).mode.equals("0") ){
+                            // mode 값이 0일 경우 디지털 방식
+                            fr_btn_analog.setBackgroundResource(R.drawable.analog_button_off);
+                            fr_btn_digital.setBackgroundResource(R.drawable.digital_button_on);
 
-                if( flow3[0].equals("0") ) {
-                    fr_sw_flow3.setChecked(false);
-                    fr_et_flow3.setBackgroundResource(R.drawable.time_button_unpressed);
-                    fr_et_flow3.setText(flow3[1]);
-                    fr_et_flow3.setEnabled(false);
-                } else {
-                    fr_sw_flow3.setChecked(true);
-                    fr_et_flow3.setBackgroundResource(R.drawable.time_button_pressed);
-                    fr_et_flow3.setText(flow3[1]);
-                    fr_et_flow3.setEnabled(true);
-                }
-                et_cleanpower.setText(((MainActivity)getActivity()).cleanPower);
-                et_cleanpower2.setText(((MainActivity)getActivity()).cleanPower2);
-                et_cleanpower3.setText(((MainActivity)getActivity()).cleanPower3);
-                et_cleanpower4.setText(((MainActivity)getActivity()).cleanPower4);
+                        } else if ( ((MainActivity)getActivity()).mode.equals("1") ) {
+                            // mode 값이 1일 경우 아날로그 방식
+                            fr_btn_analog.setBackgroundResource(R.drawable.analog_button_on);
+                            fr_btn_digital.setBackgroundResource(R.drawable.digital_button_off);
+                        }
+                        // <컴프레셔 자동 동작 설정>
+                        if( ((MainActivity)getActivity()).autoCompressure.equals("0") ){
+                            fr_sw_autocomp.setChecked(false);
+                        }else if( ((MainActivity)getActivity()).autoCompressure.equals("1") ){
+                            fr_sw_autocomp.setChecked(true);
+                        }
+                        // <알람설정>
+                        String[] flow1 = ((MainActivity)getActivity()).flow1.split(",");
+                        String[] flow2 = ((MainActivity)getActivity()).flow2.split(",");
+                        String[] flow3 = ((MainActivity)getActivity()).flow3.split(",");
+                        if( flow1[0].equals("0") ) {
+                            fr_sw_flow1.setChecked(false);
+                            fr_et_flow1.setBackgroundResource(R.drawable.time_button_unpressed);
+                            fr_et_flow1.setText(flow1[1]);
+                            fr_et_flow1.setEnabled(false);
+                        } else {
+                            fr_sw_flow1.setChecked(true);
+                            fr_et_flow1.setBackgroundResource(R.drawable.time_button_pressed);
+                            fr_et_flow1.setText(flow1[1]);
+                            fr_et_flow1.setEnabled(true);
+                        }
 
-                ((MainActivity)getActivity()).showToast("초기화 되었습니다.");
+                        if( flow2[0].equals("0") ) {
+                            fr_sw_flow2.setChecked(false);
+                            fr_et_flow2.setBackgroundResource(R.drawable.time_button_unpressed);
+                            fr_et_flow2.setText(flow2[1]);
+                            fr_et_flow2.setEnabled(false);
+                        } else {
+                            fr_sw_flow2.setChecked(true);
+                            fr_et_flow2.setBackgroundResource(R.drawable.time_button_pressed);
+                            fr_et_flow2.setText(flow2[1]);
+                            fr_et_flow2.setEnabled(true);
+                        }
+
+                        if( flow3[0].equals("0") ) {
+                            fr_sw_flow3.setChecked(false);
+                            fr_et_flow3.setBackgroundResource(R.drawable.time_button_unpressed);
+                            fr_et_flow3.setText(flow3[1]);
+                            fr_et_flow3.setEnabled(false);
+                        } else {
+                            fr_sw_flow3.setChecked(true);
+                            fr_et_flow3.setBackgroundResource(R.drawable.time_button_pressed);
+                            fr_et_flow3.setText(flow3[1]);
+                            fr_et_flow3.setEnabled(true);
+                        }
+                        et_cleanpower.setText(((MainActivity)getActivity()).cleanPower);
+                        et_cleanpower2.setText(((MainActivity)getActivity()).cleanPower2);
+                        et_cleanpower3.setText(((MainActivity)getActivity()).cleanPower3);
+                        et_cleanpower4.setText(((MainActivity)getActivity()).cleanPower4);
+
+                        ((MainActivity)getActivity()).showToast("초기화 되었습니다.");
+
+                        dialog.dismiss();
+                    }
+                });
+
+                btn_reset_no.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+
+                dialog.show();
             }
         });
 
@@ -398,6 +436,7 @@ public class SettingFragment extends Fragment {
         fr_btn_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 ((MainActivity)getActivity()).mode = mode_temp;
                 ((MainActivity)getActivity()).autoCompressure = autoCompressure_temp;
                 ((MainActivity)getActivity()).flow1 = flow1_temp;
