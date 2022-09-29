@@ -16,10 +16,11 @@
             android:layout_height="2388px">
 
             <ImageView
-                android:id="@+id/mainfrag_back_digital"
+                android:id="@+id/mainfrag_background"
                 android:layout_width="1080px"
                 android:layout_height="2388px"
                 android:src="@drawable/mainfrag_back_digital"
+                android:visibility="visible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"

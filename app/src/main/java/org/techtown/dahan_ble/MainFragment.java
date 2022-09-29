@@ -54,6 +54,7 @@ public class MainFragment extends Fragment {
         Button btn_setting = rootView.findViewById(R.id.btn_setting);
         Switch fr_sw_comp = rootView.findViewById(R.id.fr_sw_comp);
         Switch fr_sw_wash = rootView.findViewById(R.id.fr_sw_wash);
+        ImageView mainfrag_background = (ImageView) rootView.findViewById(R.id.mainfrag_background);
         ImageView iv_bluetoothstate = (ImageView) rootView.findViewById(R.id.iv_bluetoothstate);
         ImageView fr_iv_act = (ImageView) rootView.findViewById(R.id.fr_iv_act);
         ImageView fr_iv_stop = (ImageView) rootView.findViewById(R.id.fr_iv_stop);
@@ -64,6 +65,15 @@ public class MainFragment extends Fragment {
         RadioButton rb_cleanpower4 = (RadioButton) rootView.findViewById(R.id.rb_cleanpower4);
 
         //이니셜라이징
+        if( ((MainActivity)getActivity()).mode.equals("0") ){
+            // mode 값이 0일 경우 디지털 방식
+            mainfrag_background.setImageResource(R.drawable.mainfrag_back_digital);
+            fr_tv_flow.setVisibility(fr_tv_flow.VISIBLE);
+        } else if ( ((MainActivity)getActivity()).mode.equals("1") ) {
+            // mode 값이 1일 경우 아날로그 방식
+            mainfrag_background.setImageResource(R.drawable.mainfrag_back_analog);
+            fr_tv_flow.setVisibility(fr_tv_flow.INVISIBLE);
+        }
         if(tv_connect.getText().toString().equals("true")) {
             iv_bluetoothstate.setImageResource(R.drawable.ble_on);
         } else {
