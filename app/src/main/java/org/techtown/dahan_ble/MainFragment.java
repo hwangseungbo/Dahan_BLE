@@ -3,6 +3,7 @@ package org.techtown.dahan_ble;
 import static org.techtown.dahan_ble.MainActivity.comp_control;
 
 import android.content.res.ColorStateList;
+import android.media.Image;
 import android.os.Bundle;
 
 import androidx.core.content.ContextCompat;
@@ -49,12 +50,15 @@ public class MainFragment extends Fragment {
 
         //프레그먼트의 위젯
         TextView fr_tv_flow = rootView.findViewById(R.id.fr_tv_flow);
+        TextView fr_tv_flow2 = rootView.findViewById(R.id.fr_tv_flow2);
         TextView fr_tv_action_time = rootView.findViewById(R.id.fr_tv_action_time);
         TextView fr_tv_acc_time = rootView.findViewById(R.id.fr_tv_acc_time);
         Button btn_setting = rootView.findViewById(R.id.btn_setting);
         Switch fr_sw_comp = rootView.findViewById(R.id.fr_sw_comp);
         Switch fr_sw_wash = rootView.findViewById(R.id.fr_sw_wash);
         ImageView mainfrag_background = (ImageView) rootView.findViewById(R.id.mainfrag_background);
+        ImageView mainfrag_analog_gauge = (ImageView) rootView.findViewById(R.id.mainfrag_analog_gauge);
+        ImageView analog_gauge_needle = (ImageView) rootView.findViewById(R.id.analog_gauge_needle);
         ImageView iv_bluetoothstate = (ImageView) rootView.findViewById(R.id.iv_bluetoothstate);
         ImageView fr_iv_act = (ImageView) rootView.findViewById(R.id.fr_iv_act);
         ImageView fr_iv_stop = (ImageView) rootView.findViewById(R.id.fr_iv_stop);
@@ -69,10 +73,32 @@ public class MainFragment extends Fragment {
             // mode 값이 0일 경우 디지털 방식
             mainfrag_background.setImageResource(R.drawable.mainfrag_back_digital);
             fr_tv_flow.setVisibility(fr_tv_flow.VISIBLE);
+            fr_tv_flow2.setVisibility(fr_tv_flow2.INVISIBLE);
+
+            mainfrag_analog_gauge.setVisibility(mainfrag_analog_gauge.INVISIBLE);
+            analog_gauge_needle.setVisibility(analog_gauge_needle.INVISIBLE);
+
         } else if ( ((MainActivity)getActivity()).mode.equals("1") ) {
             // mode 값이 1일 경우 아날로그 방식
             mainfrag_background.setImageResource(R.drawable.mainfrag_back_analog);
             fr_tv_flow.setVisibility(fr_tv_flow.INVISIBLE);
+            fr_tv_flow2.setVisibility(fr_tv_flow2.VISIBLE);
+
+            mainfrag_analog_gauge.setVisibility(mainfrag_analog_gauge.VISIBLE);
+            analog_gauge_needle.setVisibility(analog_gauge_needle.VISIBLE);
+
+            analog_gauge_needle.setRotation(-135);  //테스트용
+            /*
+            degree      rotation
+            0	        -135
+            10	        -90
+            20	        -45
+            30	        -0
+            40	        45
+            50	        90
+            60	        135
+            */
+
         }
         if(tv_connect.getText().toString().equals("true")) {
             iv_bluetoothstate.setImageResource(R.drawable.ble_on);
@@ -81,8 +107,12 @@ public class MainFragment extends Fragment {
         }
         if(((MainActivity)getActivity()).comp_control) {
             fr_sw_comp.setChecked(true);
+            fr_sw_wash.setEnabled(true);
         } else {
             fr_sw_comp.setChecked(false);
+            fr_sw_wash.setChecked((false));
+            fr_sw_wash.setEnabled(false);
+
         }
         if(((MainActivity)getActivity()).wash_control) {
             fr_sw_wash.setChecked(true);
@@ -127,8 +157,12 @@ public class MainFragment extends Fragment {
             public void onClick(View v) {
                 if(fr_sw_comp.isChecked()){
                     ((MainActivity)getActivity()).comp_control=true;
+                    fr_sw_wash.setEnabled(true);
+
                 } else {
                     ((MainActivity)getActivity()).comp_control=false;
+                    fr_sw_wash.setChecked(false);
+                    fr_sw_wash.setEnabled(false);
                 }
             }
         });
@@ -187,6 +221,7 @@ public class MainFragment extends Fragment {
             @Override
             public void afterTextChanged(Editable s) {
                 fr_tv_flow.setText(tv_flow.getText().toString());
+                fr_tv_flow2.setText(tv_flow.getText().toString());
             }
         });
 

@@ -163,7 +163,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         //각종 위젯 초기화
-        btn_NewDeviceSearch = findViewById(R.id.btn_NewDeviceSearch);
+        btn_NewDeviceSearch = findViewById(R.id.btn_NewDeviceSearch);   // 커넥트 프래그먼트상의 위젯
         tv_connect = findViewById(R.id.tv_connect);
         tv_flow = findViewById(R.id.tv_flow);
         tv_comp_state = findViewById(R.id.tv_comp_state);
@@ -219,110 +219,129 @@ public class MainActivity extends AppCompatActivity {
                         String Data = null;
                         try {
                             Data = new String(data, StandardCharsets.UTF_8);
+                            Data = Data.replaceAll("(\r\n|\r|\n|\n\r)", "");    // \r\n 또는 \n\r 또는 \n 또는 \r을 찾아 공백으로 치환
                             Data.trim();
-                            Log.d("Rece Data : ", Data);// Receive 데이터 확인
 
-                            // 데이터 파싱 시작
-                            String[] Ddata = Data.split("_");   // ex) Ddata[0] = "$--DAHAN-MCU", Ddata[1] = "29.40,1,1,1.50,15:30:28,0*25"
-                            Ddata[1].trim();
-                            String[] DDdata = Ddata[1].split("\\*");    // ex) DDdata[0] = "29.40,1,1,1.50,15:30:28,0", DDdata[1] = "25"
-                            //Log.d("DDdata : ", DDdata[0]);
-                            DDdata[0].trim();
-                            DDdata[1] = DDdata[1].replaceAll("(\r\n|\r|\n|\n\r)", "");  // \r\n 또는 \n\r 또는 \n 또는 \r을 찾아 공백으로 치환
-                            DDdata[1].trim();
-                            //Log.d("DDdata : ", DDdata[1]);
-                            int lenth = Integer.parseInt(DDdata[1]);
+                            int in = Data.indexOf("$");
 
-                            if(DDdata[0].length() == lenth){
-                                //Log.d("판별 : ", "O 정상데이터");
-                                String[] DDDdata = DDdata[0].split(",");    // ex) DDDdata[0]="29.40" DDDdata[1]="1" DDDdata[2]="1" DDDdata[3]="1.50" DDDdata[4]="15:30:28" DDDdata[5]="0"
-                                double flow = Double.parseDouble(DDDdata[0]);
+                            //int out = Data.length();
+                            Data = Data.substring(in);
 
-                                //일단 받은 데이터는 메인액티비티의 텍스트뷰형식으로 전부 취합해둠
-                                //유량 데이터
-                                tv_flow.setText(DDDdata[0]);
+                            Log.d("Receive Data : ", Data);// Receive 데이터 확인
 
-                                //컴프레셔전원상태
-                                tv_comp_state.setText(DDDdata[1]);
+                            String[] Completely = Data.split("\\$");
 
-                                //배관세척진행상태
-                                tv_washstate.setText(DDDdata[2]);
+                            /*
+                            for (int i = 0 ; i < Completely.length - 1 ; i++) {
+                                Log.d("Several Data : ", Completely[i] + "  index : " + i);
+                            }
+                            */
 
-                                //솔벨브온오프주기(배관세척강도)
-                                tv_washpower.setText(DDDdata[3]);
+                                // 데이터 파싱 시작
+                                String[] Ddata = Completely[1].split("_");   // ex) Ddata[0] = "--DAHAN-MCU", Ddata[1] = "29.40,1,1,1.50,15:30:28,0*25"
+                                Ddata[1].trim();
+                                String[] DDdata = Ddata[1].split("\\*");    // ex) DDdata[0] = "29.40,1,1,1.50,15:30:28,0", DDdata[1] = "25"
 
-                                //배관 누적시간
-                                tv_acctime.setText(DDDdata[4]);
+                                //Log.d("DDdata : ", DDdata[0]);
+                                DDdata[0].trim();
+                                DDdata[1] = DDdata[1].replaceAll("(\r\n|\r|\n|\n\r)", "");  // \r\n 또는 \n\r 또는 \n 또는 \r을 찾아 공백으로 치환
+                                DDdata[1].trim();
+                                //Log.d("DDdata : ", DDdata[1]);
+                                int lenth = Integer.parseInt(DDdata[1]);
 
-                                //누적시간 리셋확인
-                                tv_resetcheck.setText(DDDdata[5]);
-                                if(DDDdata[5].equals("1")) {
-                                    flowresetflag = false;
-                                    tv_runningtime.setText("00:00:00");
+                                if (DDdata[0].length() == lenth) {  // DDdata[0] = "29.40,1,1,1.50,15:30:28,0"
+                                    Log.d("판별 : ", "O 정상데이터");
+                                    String[] DDDdata = DDdata[0].split(",");    // ex) DDDdata[0]="29.40" DDDdata[1]="1" DDDdata[2]="1" DDDdata[3]="1.50" DDDdata[4]="15:30:28" DDDdata[5]="0"
+                                    double flow = Double.parseDouble(DDDdata[0]);
+
+                                    //일단 받은 데이터는 메인액티비티의 텍스트뷰형식으로 전부 취합해둠
+                                    //유량 데이터
+                                    tv_flow.setText(DDDdata[0]);
+
+                                    //컴프레셔전원상태
+                                    tv_comp_state.setText(DDDdata[1]);
+
+                                    //배관세척진행상태
+                                    tv_washstate.setText(DDDdata[2]);
+
+                                    //솔벨브온오프주기(배관세척강도)
+                                    tv_washpower.setText(DDDdata[3]);
+
+                                    //배관 누적시간
+                                    tv_acctime.setText(DDDdata[4]);
+
+                                    //누적시간 리셋확인
+                                    tv_resetcheck.setText(DDDdata[5]);
+                                    if (DDDdata[5].equals("1")) {
+                                        flowresetflag = false;
+                                        tv_runningtime.setText("00:00:00");
+                                    }
+
+
+                                } else {
+                                    //Log.d("판별 : ", "X 비정상 데이터");
                                 }
 
 
-                            } else {
-                                //Log.d("판별 : ", "X 비정상 데이터");
-                            }
+                                // 데이터를 재취합하여 보내보자
+                                // 컴프레셔전원명령,배관세척명령,솔벨브온오프주기설정값,배관세척 동작시간, 누적시간리셋여부 순이다.
+                                //String send_Data = "$--DAHAN-AND_1,1,0.5,35:12,1*15\r\n";
+                                String send_Data = "$--DAHAN-AND_";
 
 
-                            // 데이터를 재취합하여 보내보자
-                            // 컴프레셔전원명령,배관세척명령,솔벨브온오프주기설정값,배관세척 동작시간, 누적시간리셋여부 순이다.
-                            //String send_Data = "$--DAHAN-AND_1,1,0.5,35:12,1*15\r\n";
-                            String send_Data = "$--DAHAN-AND_";
-
-
-                            //컴프레셔 전원명령 체크
-                            if(comp_control){
-                                send_Data = send_Data + "1,";
-                            }else {
-                                send_Data = send_Data + "0,";
-                            }
-                            //배관 세척명령 체크
-                            if(wash_control){
-                                send_Data = send_Data + "1,";
-                            }else {
-                                send_Data = send_Data + "0,";
-                            }
-                            //솔벨브온오프주기설정값 체크(cleanPower)
-                            if(radioButtoncheck.equals("0")) {
-                                send_Data = send_Data + cleanPower + ",";
-                            } else if(radioButtoncheck.equals("1")) {
-                                send_Data = send_Data + cleanPower2 + ",";
-                            } else if(radioButtoncheck.equals("2")) {
-                                send_Data = send_Data + cleanPower3 + ",";
-                            } else {
-                                send_Data = send_Data + cleanPower4 + ",";
-                            }
-
-                            //배관세척 동작시간 추가
-                            send_Data = send_Data + tv_runningtime.getText().toString() + ",";
-
-                            //누적시간 리셋   셋팅프래그먼트에서 초기화 요청시에 flowresetflag가 true로 변한다.
-                            if(flowresetflag) {
-                                send_Data = send_Data + "1";
-                            }else {
-                                send_Data = send_Data + "0";
-                            }
-
-                            send_Data = send_Data + "\r\n";
-
-
-                            byte[] send = send_Data.getBytes();
-
-                            bleManager.write(device, "0000FFE0-0000-1000-8000-00805F9B34FB", "0000FFE1-0000-1000-8000-00805F9B34FB", send, new BleWriteCallback() {
-                                @Override
-                                public void onWriteSuccess(byte[] data, BleDevice device) {
-                                    String temp = new String(data);
-                                    Log.d("Send Data : " , temp);
+                                //컴프레셔 전원명령 체크
+                                if (comp_control) {
+                                    send_Data = send_Data + "1,";
+                                } else {
+                                    send_Data = send_Data + "0,";
+                                }
+                                //배관 세척명령 체크
+                                if (wash_control) {
+                                    send_Data = send_Data + "1,";
+                                } else {
+                                    send_Data = send_Data + "0,";
+                                }
+                                //솔벨브온오프주기설정값 체크(cleanPower)
+                                if (radioButtoncheck.equals("0")) {
+                                    send_Data = send_Data + cleanPower + ",";
+                                } else if (radioButtoncheck.equals("1")) {
+                                    send_Data = send_Data + cleanPower2 + ",";
+                                } else if (radioButtoncheck.equals("2")) {
+                                    send_Data = send_Data + cleanPower3 + ",";
+                                } else {
+                                    send_Data = send_Data + cleanPower4 + ",";
                                 }
 
-                                @Override
-                                public void onFailure(int failCode, String info, BleDevice device) {
+                                //배관세척 동작시간 추가
+                                send_Data = send_Data + tv_runningtime.getText().toString() + ",";
 
+                                //누적시간 리셋   셋팅프래그먼트에서 초기화 요청시에 flowresetflag가 true로 변한다.
+                                if (flowresetflag) {
+                                    send_Data = send_Data + "1";
+                                } else {
+                                    send_Data = send_Data + "0";
                                 }
-                            });
+
+                                send_Data = send_Data + "\r\n";
+
+
+                                byte[] send = send_Data.getBytes();
+
+                                bleManager.write(device, "0000FFE0-0000-1000-8000-00805F9B34FB", "0000FFE1-0000-1000-8000-00805F9B34FB", send, new BleWriteCallback() {
+                                    @Override
+                                    public void onWriteSuccess(byte[] data, BleDevice device) {
+                                        String temp = "";
+                                        temp = new String(data);
+                                        Log.d("Send Data : ", temp);
+                                    }
+
+                                    @Override
+                                    public void onFailure(int failCode, String info, BleDevice device) {
+
+                                    }
+                                });
+
+
 
                         } catch (Exception e) {
                             Log.d("Error : ", e.getMessage());
