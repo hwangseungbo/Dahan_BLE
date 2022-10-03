@@ -13,10 +13,12 @@ import android.os.Handler;
 import android.os.Message;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.Switch;
@@ -163,6 +165,7 @@ public class MainFragment extends Fragment {
                     ((MainActivity)getActivity()).comp_control=false;
                     fr_sw_wash.setChecked(false);
                     fr_sw_wash.setEnabled(false);
+                    ((MainActivity)getActivity()).actionflag = false;   // 동작시간 타이머를 세는 쓰레드를 중지시키는 플래그
                 }
             }
         });
@@ -220,8 +223,15 @@ public class MainFragment extends Fragment {
             public void onTextChanged(CharSequence s, int start, int before, int count) { }
             @Override
             public void afterTextChanged(Editable s) {
-                fr_tv_flow.setText(tv_flow.getText().toString());
-                fr_tv_flow2.setText(tv_flow.getText().toString());
+                try {
+                    fr_tv_flow.setText(tv_flow.getText().toString());
+                    fr_tv_flow2.setText(tv_flow.getText().toString());
+                    float flow = Float.parseFloat(tv_flow.getText().toString());
+                    flow = (flow * (float)4.5) - 135;
+                    analog_gauge_needle.setRotation(flow);
+                }catch (Exception e) {
+                    Log.d("아날로그유량 각도문제 : ", e.getMessage());
+                }
             }
         });
 
