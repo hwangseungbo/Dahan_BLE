@@ -230,7 +230,7 @@ public class MainFragment extends Fragment {
                     if ( ((MainActivity)getActivity()).mode.equals("1") ) { //아날로그 방식일 경우에만 게이지 바늘 각도계산
                         float flow = Float.parseFloat(tv_flow.getText().toString());
                         flow = (flow * (float) 4.5) - 135;
-                        if(flow <= 60) {
+                        if(flow <= 135) {   //각도가 135도 즉 유량값이 60.0 이하일때
                             analog_gauge_needle.setRotation(flow);
                         } else {
                             analog_gauge_needle.setRotation(135);
