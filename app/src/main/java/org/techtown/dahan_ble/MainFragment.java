@@ -152,6 +152,13 @@ public class MainFragment extends Fragment {
                 ((MainActivity)getActivity()).radioButtoncheck = "3";
             }
         });
+        //오토컴프가 켜져있을 경우 자동으로 콤프스위치 온
+        if(((MainActivity)getActivity()).autoCompressure.equals("1"))
+        {
+            fr_sw_comp.setChecked(true);
+            ((MainActivity)getActivity()).comp_control=true;
+            fr_sw_wash.setEnabled(true);
+        }
 
 
         fr_sw_comp.setOnClickListener(new View.OnClickListener() {
@@ -166,6 +173,8 @@ public class MainFragment extends Fragment {
                     fr_sw_wash.setChecked(false);
                     fr_sw_wash.setEnabled(false);
                     ((MainActivity)getActivity()).actionflag = false;   // 동작시간 타이머를 세는 쓰레드를 중지시키는 플래그
+                    ((MainActivity)getActivity()).wash_control=false;
+                    btn_setting.setEnabled(true);
                 }
             }
         });
@@ -180,9 +189,11 @@ public class MainFragment extends Fragment {
                     String actiontime = simple.format(date);
                     ((MainActivity)getActivity()).actionflag = true;
                     ((MainActivity)getActivity()).ShowTimeMethod(actiontime);
+                    btn_setting.setEnabled(false);
                 } else {
                     ((MainActivity)getActivity()).wash_control=false;
                     ((MainActivity)getActivity()).actionflag = false;
+                    btn_setting.setEnabled(true);
                     //fr_tv_action_time.setText("00:00:00");
                 }
             }

@@ -178,11 +178,19 @@ public class SettingFragment extends Fragment {
                 if(fr_sw_flow1.isChecked()){
                     fr_et_flow1.setBackgroundResource(R.drawable.time_button_pressed);
                     fr_et_flow1.setEnabled(true);
+                    fr_sw_flow2.setEnabled(true);
+                    fr_sw_flow3.setEnabled(true);
                     flow1_temp = "1," + fr_et_flow1.getText().toString().trim();
                 }else{
                     fr_et_flow1.setBackgroundResource(R.drawable.time_button_unpressed);
                     fr_et_flow1.setEnabled(false);
                     flow1_temp = "0," + fr_et_flow1.getText().toString().trim();
+                    flow2_temp = "0," + fr_et_flow1.getText().toString().trim();
+                    flow3_temp = "0," + fr_et_flow1.getText().toString().trim();
+                    fr_sw_flow2.setChecked(false);
+                    fr_sw_flow2.setEnabled(false);
+                    fr_sw_flow3.setChecked(false);
+                    fr_sw_flow3.setEnabled(false);
                 }
             }
         });

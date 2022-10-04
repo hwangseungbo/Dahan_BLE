@@ -78,11 +78,11 @@ public class MainActivity extends AppCompatActivity {
     public static String autoCompressure;   // 컴프레셔 자동동작(0 = 자동동작 x, 1 = 자동동작 o)
     public static String autoCompressure_default = "0"; //초기값(초기화시 이용)
     public static String flow1;    // 유량계 오동작 알람설정(0 = off, 1 = on, 뒤에 숫자는 주기[초])
-    public static String flow1_default = "1,10";    //초기값(초기화시 이용)
+    public static String flow1_default = "0,10";    //초기값(초기화시 이용)
     public static String flow2;    // 유량계 최소값 모니터링(0 = off, 1 = on, 뒤에 숫자는 주기[초])
-    public static String flow2_default = "1,1"; //초기값(초기화시 이용)
+    public static String flow2_default = "0,1"; //초기값(초기화시 이용)
     public static String flow3;    // 유량계 최댓값 모니터링(0 = off, 1 = on, 뒤에 숫자는 주기[초])
-    public static String flow3_default = "1,60";    //초기값(초기화시 이용)
+    public static String flow3_default = "0,60";    //초기값(초기화시 이용)
     public static String cleanPower; // 세척강도
     public static String cleanPower2; // 세척강도
     public static String cleanPower3; // 세척강도
@@ -161,6 +161,7 @@ public class MainActivity extends AppCompatActivity {
         appData = getSharedPreferences("appData", MODE_PRIVATE);
         load();
 
+        //showToast(flow1 + " " + flow2 + " " + flow3);
 
         //각종 위젯 초기화
         btn_NewDeviceSearch = findViewById(R.id.btn_NewDeviceSearch);   // 커넥트 프래그먼트상의 위젯
@@ -642,9 +643,9 @@ public class MainActivity extends AppCompatActivity {
 
         mode = appData.getString("mode","0");  // 메인화면 테마 설정(0 = 디지털 모드, 1 = 아날로그 모드)
         autoCompressure = appData.getString("autoCompressure","0");   // 컴프레셔 자동동작(0 = 자동동작 x, 1 = 자동동작 o, default = 0)
-        flow1 = appData.getString("flow1","1,10");    // 유량계 오동작 알람설정(0 = off, 1 = on, 뒤에 숫자는 주기[초])
-        flow2 = appData.getString("flow2","1,1");    // 유량계 최소값 모니터링(0 = off, 1 = on, 뒤에 숫자는 주기[초])
-        flow3 = appData.getString("flow3","1,60");    // 유량계 최댓값 모니터링(0 = off, 1 = on, 뒤에 숫자는 주기[초])
+        flow1 = appData.getString("flow1","0,10");    // 유량계 오동작 알람설정(0 = off, 1 = on, 뒤에 숫자는 주기[초])
+        flow2 = appData.getString("flow2","0,1");    // 유량계 최소값 모니터링(0 = off, 1 = on, 뒤에 숫자는 주기[초])
+        flow3 = appData.getString("flow3","0,60");    // 유량계 최댓값 모니터링(0 = off, 1 = on, 뒤에 숫자는 주기[초])
         cleanPower = appData.getString("cleanPower","0.5");   // 세척강도
         cleanPower2 = appData.getString("cleanPower2","1.0");   // 세척강도2
         cleanPower3 = appData.getString("cleanPower3","2.0");   // 세척강도3
