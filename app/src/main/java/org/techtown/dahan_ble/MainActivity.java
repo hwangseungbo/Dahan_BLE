@@ -92,6 +92,10 @@ public class MainActivity extends AppCompatActivity {
     public static String cleanPower3_default = "2.0";    //초기값(초기화시 이용)
     public static String cleanPower4_default = "3.0";    //초기값(초기화시 이용)
     public static String radioButtoncheck = "0";
+    public static int heartbeat1 = 0;
+    public static int heartbeat2 = 0;
+    public static boolean sounds = false;
+
 
     public static boolean flowresetflag = false; //누적시간 리셋요청여부
     public static int resetcount = 10;
@@ -110,13 +114,14 @@ public class MainActivity extends AppCompatActivity {
 
     ImageView btn_NewDeviceSearch, bluetoothstate1 ;
     TextView tv_connect, tv_flow, tv_comp_state, tv_washstate, tv_washpower, tv_acctime, tv_resetcheck;
-    TextView tv_runningtime;
+    TextView tv_runningtime, tv_alarm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        MySoundPlayer.initSounds(getApplicationContext());
 
         // Get BLE manager and initialization
         BleManager.ScanOptions scanOptions = BleManager.ScanOptions
@@ -170,6 +175,7 @@ public class MainActivity extends AppCompatActivity {
         tv_acctime = findViewById(R.id.tv_acctime);
         tv_resetcheck = findViewById(R.id.tv_resetcheck);
         tv_runningtime = findViewById(R.id.tv_runningtime);
+        tv_alarm = findViewById(R.id.tv_alarm);
 
 
         // BLE connect Callback
@@ -732,6 +738,161 @@ public class MainActivity extends AppCompatActivity {
         };
         Thread thread = new Thread(task);
         thread.start();
+    }
+
+
+    // 유량계 오동작 알람
+    public void Alarm1() {
+        final Handler handler1 = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+
+                try {
+                    String[] limit = flow1.split(",");
+                    int lmt = Integer.parseInt(limit[1]);
+
+                    int flowvalue = (int)(Float.parseFloat(tv_flow.getText().toString()));
+
+                    if(flowvalue < 1) { //  Alarm 조건1 : Flowmeter Fault Alarm, 배관 세척 On 이후 X초 이내 유량계 신호가 0 이상 되지 않을때 알람
+                        heartbeat1++;
+
+                    } else {
+                        heartbeat1 = 0;
+                    }
+
+                    if(lmt < heartbeat1) {
+                        // Alarm 조건1 : Flowmeter Fault Alarm
+                        tv_alarm.setText("1");      // tv_alarm가 "0"일 경우 알람 X,    "1"일 경우 알람 O.
+                    } else {
+                        String[] lmt2 = flow2.split(",");
+                        String[] lmt3 = flow3.split(",");
+                        if(Integer.parseInt(lmt2[1]) < flowvalue && Integer.parseInt(lmt3[1]) > flowvalue) {
+                            if(sounds) {
+                                tv_alarm.setText("0");
+                            }
+                        }
+                    }
+
+                    //showToast(limit[1] + "    " +String.valueOf(heartbeat1));
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        Runnable task1 = new Runnable() {
+            @Override
+            public void run() {
+                while(actionflag) {
+                    try{
+                        Thread.sleep(1000);
+                    }catch (InterruptedException e){}
+                    handler1.sendEmptyMessage(1); //핸들러 호출 = 시간 갱신
+                }
+            }
+        };
+        Thread thread = new Thread(task1);
+        thread.start();
+    }
+
+    // 유량계 최솟값 모니터링
+    public void Alarm2() {
+        final Handler handler2 = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+
+                try {
+                    String[] limit = flow2.split(",");
+                    int lmt = Integer.parseInt(limit[1]);
+
+                    int flowvalue = (int)(Float.parseFloat(tv_flow.getText().toString()));
+
+                    if(heartbeat2 > 10) { //  Alarm 조건2 : Flowmeter Low Alarm, 배관 세척 On 이후 유량계 신호가 입력한 값 이하로 떨어졌을 때 알람
+                        // 배관세척 동작 10초 이후에 정해진 값보다 유량이 낮게 나올시 알림
+                        if(flowvalue < lmt) {
+                            tv_alarm.setText("1");      // tv_alarm가 "0"일 경우 알람 X,    "1"일 경우 알람 O.
+                        }
+                    }
+
+                    heartbeat2++;
+
+                    //showToast(limit[1] + "    " +String.valueOf(heartbeat2));
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        Runnable task2 = new Runnable() {
+            @Override
+            public void run() {
+                while(actionflag) {
+                    try{
+                        Thread.sleep(1000);
+                    }catch (InterruptedException e){}
+                    handler2.sendEmptyMessage(1); //핸들러 호출 = 시간 갱신
+                }
+            }
+        };
+        Thread thread = new Thread(task2);
+        thread.start();
+    }
+
+    // 유량계 최댓값 모니터링
+    public void Alarm3() {
+        final Handler handler3 = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+
+                try {
+                    String[] limit = flow3.split(",");
+                    int lmt3 = Integer.parseInt(limit[1]);
+
+                    int flowvalue = (int)(Float.parseFloat(tv_flow.getText().toString()));
+
+                    if(lmt3 < flowvalue) { //  Alarm 조건3 : Flowmeter High Alarm , 배관 세척 On 이후 유량계 신호가 입력한 값을 초과 하였을 때 알람
+                        // 배관세척 동작 이후 제한값 초과시 알람
+                        tv_alarm.setText("1");      // tv_alarm가 "0"일 경우 알람 X,    "1"일 경우 알람 O.
+                    }
+
+                    showToast(limit[1]);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        Runnable task3 = new Runnable() {
+            @Override
+            public void run() {
+                while(actionflag) {
+                    try{
+                        Thread.sleep(1000);
+                    }catch (InterruptedException e){}
+                    handler3.sendEmptyMessage(1); //핸들러 호출 = 시간 갱신
+                }
+            }
+        };
+        Thread thread = new Thread(task3);
+        thread.start();
+    }
+
+
+
+
+
+
+    public void soundOn() {
+        MySoundPlayer.play(MySoundPlayer.Pager_Beeps);
+        sounds = true;
+    }
+    public void soundStop() {
+        MySoundPlayer.stop();
+        sounds = false;
+        //MySoundPlayer.initSounds(getApplicationContext());
     }
 
     @Override

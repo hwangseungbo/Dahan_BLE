@@ -76,6 +76,14 @@
         app:layout_constraintStart_toEndOf="@+id/tv_connect"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/tv_alarm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#00000000"
+        app:layout_constraintStart_toEndOf="@+id/tv_connect"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <FrameLayout
         android:id="@+id/container"
         android:layout_width="1080px"

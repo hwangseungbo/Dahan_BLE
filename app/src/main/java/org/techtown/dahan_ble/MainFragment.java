@@ -48,6 +48,7 @@ public class MainFragment extends Fragment {
         TextView tv_runningtime = super.getActivity().findViewById(R.id.tv_runningtime);
         TextView tv_acctime = super.getActivity().findViewById(R.id.tv_acctime);
         TextView tv_washstate = super.getActivity().findViewById(R.id.tv_washstate);
+        TextView tv_alarm = super.getActivity().findViewById(R.id.tv_alarm);
 
 
         //프레그먼트의 위젯
@@ -175,6 +176,15 @@ public class MainFragment extends Fragment {
                     ((MainActivity)getActivity()).actionflag = false;   // 동작시간 타이머를 세는 쓰레드를 중지시키는 플래그
                     ((MainActivity)getActivity()).wash_control=false;
                     btn_setting.setEnabled(true);
+                    tv_alarm.setText("0");
+                    fr_iv_post.setImageResource(R.drawable.action_state_nosign);
+                    if(((MainActivity)getActivity()).sounds) {
+                        //sounds가 true인 경우에 스탑
+                        ((MainActivity)getActivity()).soundStop();
+                    }
+                    ((MainActivity)getActivity()).sounds = false;
+                    ((MainActivity)getActivity()).heartbeat1 = 0;
+                    ((MainActivity)getActivity()).heartbeat2 = 0;
                 }
             }
         });
@@ -183,6 +193,7 @@ public class MainFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if(fr_sw_wash.isChecked()){
+                    fr_tv_action_time.setText("00:00:00");
                     ((MainActivity)getActivity()).wash_control=true;
                     SimpleDateFormat simple = new SimpleDateFormat("HH:mm:ss");
                     Date date = new Date();
@@ -190,10 +201,33 @@ public class MainFragment extends Fragment {
                     ((MainActivity)getActivity()).actionflag = true;
                     ((MainActivity)getActivity()).ShowTimeMethod(actiontime);
                     btn_setting.setEnabled(false);
+
+                    String[] check1 = ((MainActivity)getActivity()).flow1.split(",");
+                    if(check1[0].equals("1")) {      //알람이 켜져있을경우 쓰레드 굴림
+                        ((MainActivity)getActivity()).Alarm1();
+                    }
+                    String[] check2 = ((MainActivity)getActivity()).flow2.split(",");
+                    if(check2[0].equals("1")) {      //알람이 켜져있을경우 쓰레드 굴림
+                        ((MainActivity)getActivity()).Alarm2();
+                    }
+                    String[] check3 = ((MainActivity)getActivity()).flow3.split(",");
+                    if(check3[0].equals("1")) {      //알람이 켜져있을경우 쓰레드 굴림
+                        ((MainActivity)getActivity()).Alarm3();
+                    }
                 } else {
                     ((MainActivity)getActivity()).wash_control=false;
                     ((MainActivity)getActivity()).actionflag = false;
+                    tv_alarm.setText("0");
+                    fr_iv_post.setImageResource(R.drawable.action_state_nosign);
+                    if(((MainActivity)getActivity()).sounds) {
+                        //sounds가 true인 경우에 스탑
+                        ((MainActivity)getActivity()).soundStop();
+                    }
+                    ((MainActivity)getActivity()).sounds = false;
+                    ((MainActivity)getActivity()).heartbeat1 = 0;
+                    ((MainActivity)getActivity()).heartbeat2 = 0;
                     btn_setting.setEnabled(true);
+
                     //fr_tv_action_time.setText("00:00:00");
                 }
             }
@@ -206,6 +240,33 @@ public class MainFragment extends Fragment {
                 mainActivity.onFragmentChanged(2);
             }
         });
+
+        tv_alarm.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // tv_alarm가 "0"일 경우 알람 X,    "1"일 경우 알람 O.
+                if(tv_alarm.getText().toString().equals("1")){
+                    fr_iv_post.setImageResource(R.drawable.action_state_stop);
+                    if( !((MainActivity)getActivity()).sounds ) {
+                        // sounds가 false인 경우에 재생
+                        ((MainActivity)getActivity()).soundOn();
+                    }
+                } else if(tv_alarm.getText().toString().equals("0")) {
+                    fr_iv_post.setImageResource(R.drawable.action_state_nosign);
+                    if(((MainActivity)getActivity()).sounds) {
+                        //sounds가 true인 경우에 스탑
+                        ((MainActivity)getActivity()).soundStop();
+                    }
+                }
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
 
         tv_connect.addTextChangedListener(new TextWatcher() {
             @Override
