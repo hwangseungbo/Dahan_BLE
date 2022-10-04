@@ -146,9 +146,6 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
-
-
         /*상태바 제거*/
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
