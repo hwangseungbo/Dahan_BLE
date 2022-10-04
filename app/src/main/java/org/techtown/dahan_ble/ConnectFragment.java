@@ -14,12 +14,6 @@ public class ConnectFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_connect, container, false);
 
-
-
-
-
-
-
         return rootView;
     }
 

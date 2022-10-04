@@ -226,9 +226,18 @@ public class MainFragment extends Fragment {
                 try {
                     fr_tv_flow.setText(tv_flow.getText().toString());
                     fr_tv_flow2.setText(tv_flow.getText().toString());
-                    float flow = Float.parseFloat(tv_flow.getText().toString());
-                    flow = (flow * (float)4.5) - 135;
-                    analog_gauge_needle.setRotation(flow);
+
+                    if ( ((MainActivity)getActivity()).mode.equals("1") ) { //아날로그 방식일 경우에만 게이지 바늘 각도계산
+                        float flow = Float.parseFloat(tv_flow.getText().toString());
+                        flow = (flow * (float) 4.5) - 135;
+                        if(flow <= 60) {
+                            analog_gauge_needle.setRotation(flow);
+                        } else {
+                            analog_gauge_needle.setRotation(135);
+                        }
+
+                    }
+
                 }catch (Exception e) {
                     Log.d("아날로그유량 각도문제 : ", e.getMessage());
                 }

@@ -461,6 +461,9 @@ public class MainActivity extends AppCompatActivity {
                             if (device.address.equals(d.address)) {
                                 return;
                             }
+                            if(device.name.equals("unknown")){
+                                return;
+                            }
                         }
                         deviceList.add(device);
                         adapter.addItem(new Item(device.name, device.address));
@@ -499,6 +502,9 @@ public class MainActivity extends AppCompatActivity {
                             public void onLeScan(BleDevice device, int rssi, byte[] scanRecord) {
                                 for (BleDevice d : deviceList) {
                                     if (device.address.equals(d.address)) {
+                                        return;
+                                    }
+                                    if(device.name.equals("unknown")){
                                         return;
                                     }
                                 }
