@@ -20,7 +20,7 @@ BLE를 활용한 안드로이드 어플리케이션.
 
 ### GIF Image
 -----
-<p align="center"><img src="/img/1.gif" width="600"></p>
+<p align="center"><img src="/img/1.gif" width="300"></p>
 
 <br />
 
