@@ -857,7 +857,7 @@ public class MainActivity extends AppCompatActivity {
                         tv_alarm.setText("1");      // tv_alarm가 "0"일 경우 알람 X,    "1"일 경우 알람 O.
                     }
 
-                    showToast(limit[1]);
+                    //showToast(limit[1]);
 
                 } catch (Exception e) {
                     e.printStackTrace();

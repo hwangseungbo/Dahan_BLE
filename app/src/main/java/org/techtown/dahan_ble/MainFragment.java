@@ -176,13 +176,15 @@ public class MainFragment extends Fragment {
                     ((MainActivity)getActivity()).actionflag = false;   // 동작시간 타이머를 세는 쓰레드를 중지시키는 플래그
                     ((MainActivity)getActivity()).wash_control=false;
                     btn_setting.setEnabled(true);
-                    tv_alarm.setText("0");
+                    //tv_alarm.setText("0");
                     fr_iv_post.setImageResource(R.drawable.action_state_nosign);
+
                     if(((MainActivity)getActivity()).sounds) {
+                        fr_iv_post.setImageResource(R.drawable.action_state_stop);
                         //sounds가 true인 경우에 스탑
-                        ((MainActivity)getActivity()).soundStop();
+                        //((MainActivity)getActivity()).soundStop();
                     }
-                    ((MainActivity)getActivity()).sounds = false;
+                    //((MainActivity)getActivity()).sounds = false;
                     ((MainActivity)getActivity()).heartbeat1 = 0;
                     ((MainActivity)getActivity()).heartbeat2 = 0;
                 }
@@ -217,13 +219,16 @@ public class MainFragment extends Fragment {
                 } else {
                     ((MainActivity)getActivity()).wash_control=false;
                     ((MainActivity)getActivity()).actionflag = false;
-                    tv_alarm.setText("0");
+                    //tv_alarm.setText("0");
                     fr_iv_post.setImageResource(R.drawable.action_state_nosign);
+
                     if(((MainActivity)getActivity()).sounds) {
+                        fr_iv_post.setImageResource(R.drawable.action_state_stop);
                         //sounds가 true인 경우에 스탑
-                        ((MainActivity)getActivity()).soundStop();
+                        //((MainActivity)getActivity()).soundStop();
                     }
-                    ((MainActivity)getActivity()).sounds = false;
+                    //((MainActivity)getActivity()).sounds = false;
+
                     ((MainActivity)getActivity()).heartbeat1 = 0;
                     ((MainActivity)getActivity()).heartbeat2 = 0;
                     btn_setting.setEnabled(true);
@@ -307,6 +312,10 @@ public class MainFragment extends Fragment {
                         } else {
                             analog_gauge_needle.setRotation(135);
                         }
+
+                    }
+
+                    if(((MainActivity)getActivity()).sounds) {
 
                     }
 
