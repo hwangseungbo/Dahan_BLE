@@ -281,6 +281,19 @@ public class MainActivity extends AppCompatActivity {
                                         tv_runningtime.setText("00:00:00");
                                     }
 
+                                    if(sounds) {
+
+                                        int flowvalue = (int)(Float.parseFloat(tv_flow.getText().toString()));
+
+                                        String[] lmt2 = flow2.split(",");
+                                        String[] lmt3 = flow3.split(",");
+
+                                        if( Integer.parseInt(lmt2[1]) < flowvalue && Integer.parseInt(lmt3[1]) > flowvalue ) {
+                                            tv_alarm.setText("0");
+                                        }
+
+                                    }
+
 
                                 } else {
                                     //Log.d("판별 : ", "X 비정상 데이터");

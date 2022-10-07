@@ -181,8 +181,6 @@ public class MainFragment extends Fragment {
 
                     if(((MainActivity)getActivity()).sounds) {
                         fr_iv_post.setImageResource(R.drawable.action_state_stop);
-                        //sounds가 true인 경우에 스탑
-                        //((MainActivity)getActivity()).soundStop();
                     }
                     //((MainActivity)getActivity()).sounds = false;
                     ((MainActivity)getActivity()).heartbeat1 = 0;
@@ -224,8 +222,6 @@ public class MainFragment extends Fragment {
 
                     if(((MainActivity)getActivity()).sounds) {
                         fr_iv_post.setImageResource(R.drawable.action_state_stop);
-                        //sounds가 true인 경우에 스탑
-                        //((MainActivity)getActivity()).soundStop();
                     }
                     //((MainActivity)getActivity()).sounds = false;
 
@@ -309,15 +305,13 @@ public class MainFragment extends Fragment {
                         flow = (flow * (float) 4.5) - 135;
                         if(flow <= 135) {   //각도가 135도 즉 유량값이 60.0 이하일때
                             analog_gauge_needle.setRotation(flow);
+                            Thread.sleep(10);
                         } else {
                             analog_gauge_needle.setRotation(135);
                         }
 
                     }
 
-                    if(((MainActivity)getActivity()).sounds) {
-
-                    }
 
                 }catch (Exception e) {
                     Log.d("아날로그유량 각도문제 : ", e.getMessage());
@@ -335,11 +329,7 @@ public class MainFragment extends Fragment {
                 if(tv_comp_state.getText().toString().equals("0")){
 
                 } else if (tv_comp_state.getText().toString().equals("1")){
-                    /*      이거아님
-                    fr_iv_act.setImageResource(R.drawable.action_state_act);
-                    fr_iv_stop.setImageResource(R.drawable.action_state_nosign);
-                    fr_iv_post.setImageResource(R.drawable.action_state_nosign);
-                    */
+
                 }
             }
         });
