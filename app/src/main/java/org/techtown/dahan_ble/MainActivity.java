@@ -69,7 +69,6 @@ public class MainActivity extends AppCompatActivity {
 
     // 어플리케이션 설정파일 관련 (_default 가 붙은 값은 초기화시 초기값으로 이용)
     private SharedPreferences appData;
-
     public static String devName;
     public static String devMacadd;
 
