@@ -62,6 +62,7 @@ public class SettingFragment extends Fragment {
         Button btn_back = rootView.findViewById(R.id.btn_back);
         Button fr_btn_flowreset = (Button) rootView.findViewById(R.id.fr_btn_flowreset);
         Button fr_btn_appreset = (Button) rootView.findViewById(R.id.fr_btn_appreset);
+        Button fr_btn_exit = (Button) rootView.findViewById(R.id.fr_btn_exit);
         TextView fr_setting_devName = (TextView) rootView.findViewById(R.id.fr_setting_devName);
         TextView fr_setting_macAdd = (TextView) rootView.findViewById(R.id.fr_setting_macAdd);
 
@@ -343,9 +344,6 @@ public class SettingFragment extends Fragment {
 
 
 
-
-
-
         btn_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -521,6 +519,13 @@ public class SettingFragment extends Fragment {
 
 
                 ((MainActivity)getActivity()).showToast( "저장 되었습니다.");
+            }
+        });
+
+        fr_btn_exit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
             }
         });
 

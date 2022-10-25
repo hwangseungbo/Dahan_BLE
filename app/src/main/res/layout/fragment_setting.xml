@@ -185,6 +185,17 @@
                 app:layout_constraintTop_toBottomOf="@+id/fr_btn_power4" />
 
             <Button
+                android:id="@+id/fr_btn_exit"
+                android:layout_width="198px"
+                android:layout_height="100px"
+                android:layout_marginTop="252dp"
+                android:layout_marginEnd="32dp"
+                android:background="@drawable/switch_track_off"
+                android:text="연결해제"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/fr_btn_power4" />
+
+            <Button
                 android:id="@+id/fr_btn_appreset"
                 android:layout_width="198px"
                 android:layout_height="100px"
