@@ -10,6 +10,7 @@ import android.Manifest;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -95,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
     public static int heartbeat2 = 0;
     public static boolean sounds = false;
 
-
+    public static boolean IwantDisconnect = false;
     public static boolean flowresetflag = false; //누적시간 리셋요청여부
     public static int resetcount = 10;
     public static boolean comp_control = false; //컴프레셔 제어
@@ -142,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
 
         //프래그먼트 인플레이트
         connectFragment = (ConnectFragment)getSupportFragmentManager().findFragmentById(R.id.connectFragment);
-        //connectFragment = new ConnectFragment();
+        connectFragment = new ConnectFragment();
         //settingFragment = (SettingFragment)getSupportFragmentManager().findFragmentById(R.id.settingFragment);
         settingFragment = new SettingFragment();
         //mainFragment = (MainFragment)getSupportFragmentManager().findFragmentById(R.id.mainFragment);
@@ -403,51 +404,96 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
 
-                if (tv_connect.getText().toString().equals("false")) {
-                    pd = new ProgressDialog(MainActivity.this);
-                    pd.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-                    pd.show();
-                    //showToast("1차 시도");
-                    bleManager.connect(connectedDeviceMacAddress, bleConnectCallback);
+                if(IwantDisconnect=false){
+                    if (tv_connect.getText().toString().equals("false")) {
+                        pd = new ProgressDialog(MainActivity.this);
+                        pd.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                        pd.show();
+                        //showToast("1차 시도");
+                        bleManager.connect(connectedDeviceMacAddress, bleConnectCallback);
+                    }
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    if (tv_connect.getText().toString().equals("false")) {
+                        //showToast("2차 시도");
+                        bleManager.connect(connectedDeviceMacAddress, bleConnectCallback);
+                    }
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    if (tv_connect.getText().toString().equals("false")) {
+                        //showToast("3차 시도");
+                        bleManager.connect(connectedDeviceMacAddress, bleConnectCallback);
+                    }
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    if (tv_connect.getText().toString().equals("false")) {
+                        //showToast("4차 시도");
+                        bleManager.connect(connectedDeviceMacAddress, bleConnectCallback);
+                    }
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    if (tv_connect.getText().toString().equals("false")) {
+                        //showToast("5차 시도");
+                        bleManager.connect(connectedDeviceMacAddress, bleConnectCallback);
+                    }
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    if (tv_connect.getText().toString().equals("false")) {
+                        //showToast("6차 시도");
+                        bleManager.connect(connectedDeviceMacAddress, bleConnectCallback);
+                    }
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    if (tv_connect.getText().toString().equals("false")) {
+                        //showToast("7차 시도");
+                        bleManager.connect(connectedDeviceMacAddress, bleConnectCallback);
+                    }
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    if (tv_connect.getText().toString().equals("false")) {
+                        //showToast("8차 시도");
+                        bleManager.connect(connectedDeviceMacAddress, bleConnectCallback);
+                    }
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    if (tv_connect.getText().toString().equals("false")) {
+                        //showToast("9차 시도");
+                        bleManager.connect(connectedDeviceMacAddress, bleConnectCallback);
+                    }
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    if (tv_connect.getText().toString().equals("false")) {
+                        //showToast("10차 시도");
+                        bleManager.connect(connectedDeviceMacAddress, bleConnectCallback);
+                    }
                 }
-
-                if (tv_connect.getText().toString().equals("false")) {
-                    //showToast("2차 시도");
-                    bleManager.connect(connectedDeviceMacAddress, bleConnectCallback);
-                }
-                if (tv_connect.getText().toString().equals("false")) {
-                    //showToast("3차 시도");
-                    bleManager.connect(connectedDeviceMacAddress, bleConnectCallback);
-                }
-                if (tv_connect.getText().toString().equals("false")) {
-                    //showToast("4차 시도");
-                    bleManager.connect(connectedDeviceMacAddress, bleConnectCallback);
-                }
-                if (tv_connect.getText().toString().equals("false")) {
-                    //showToast("5차 시도");
-                    bleManager.connect(connectedDeviceMacAddress, bleConnectCallback);
-                }
-                if (tv_connect.getText().toString().equals("false")) {
-                    //showToast("6차 시도");
-                    bleManager.connect(connectedDeviceMacAddress, bleConnectCallback);
-                }
-                if (tv_connect.getText().toString().equals("false")) {
-                    //showToast("7차 시도");
-                    bleManager.connect(connectedDeviceMacAddress, bleConnectCallback);
-                }
-                if (tv_connect.getText().toString().equals("false")) {
-                    //showToast("8차 시도");
-                    bleManager.connect(connectedDeviceMacAddress, bleConnectCallback);
-                }
-                if (tv_connect.getText().toString().equals("false")) {
-                    //showToast("9차 시도");
-                    bleManager.connect(connectedDeviceMacAddress, bleConnectCallback);
-                }
-                if (tv_connect.getText().toString().equals("false")) {
-                    //showToast("10차 시도");
-                    bleManager.connect(connectedDeviceMacAddress, bleConnectCallback);
-                }
-
             }
         });
 
@@ -893,8 +939,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    public void DisconnectBLE() {
+        if(!connectedDeviceMacAddress.equals(null)){
+            onFragmentChanged(0);
+            IwantDisconnect =true;
+            bleManager.disconnectAll();
+            IwantDisconnect =false;
 
-
+            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+        }
+    }
 
 
     public void soundOn() {
