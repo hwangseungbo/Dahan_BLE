@@ -527,8 +527,34 @@ public class SettingFragment extends Fragment {
         fr_btn_exit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //다이얼로그 이벤트를 만들어줍니다.
 
+                //팝업창 띄우기
+                dialog = new Dialog(getContext(), android.R.style.Theme_Material_Light_Dialog);
+                dialog.setContentView(R.layout.setting_dialog_reset);
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+
+                Button btn_reset_yes = dialog.findViewById(R.id.btn_reset_yes);
+                Button btn_reset_no = dialog.findViewById(R.id.btn_reset_no);
+
+                btn_reset_yes.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ((MainActivity)getActivity()).DisconnectBLE();
+                        dialog.dismiss();
+                    }
+                });
+
+                btn_reset_no.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+
+                dialog.show();
+
+                /*
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setTitle("연결해제").setMessage("연결을 해제하시겠습니까?");
 
@@ -548,7 +574,7 @@ public class SettingFragment extends Fragment {
 
                 AlertDialog alertDialog = builder.create();
                 alertDialog.show();
-
+                */
             }
         });
 
