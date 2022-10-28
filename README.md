@@ -15,6 +15,8 @@ BLE를 활용한 안드로이드 어플리케이션.
 <p align="center"><img src="/img/2.jpg" width="250"></p>
 <p align="center"><img src="/img/3.jpg" width="250"></p>
 <p align="center"><img src="/img/4.jpg" width="250"></p>
+<p align="center"><img src="/img/5.jpg" width="250"></p>
+https://www.wowtv.co.kr/NewsCenter/News/Read?articleId=A202210270266&t=NN
 
 <br />
 
