@@ -386,13 +386,18 @@ public class MainActivity extends AppCompatActivity {
                 });
 
             }
-
             @Override
             public void onDisconnected(String info, int status, BleDevice device) {
                 showToast("연결이 해제되었습니다.");
                 tv_connect.setText("false");
+                if(MainActivity.sounds) {
+                    //sounds가 true인 경우에 스탑
+                    soundStop();
+                }
+
             }
         };
+
 
         tv_connect.addTextChangedListener(new TextWatcher() {
             @Override
@@ -404,7 +409,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
 
-                if(IwantDisconnect=false){
+                if(!IwantDisconnect){
                     if (tv_connect.getText().toString().equals("false")) {
                         pd = new ProgressDialog(MainActivity.this);
                         pd.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
@@ -494,6 +499,7 @@ public class MainActivity extends AppCompatActivity {
                         bleManager.connect(connectedDeviceMacAddress, bleConnectCallback);
                     }
                 }
+
             }
         });
 
@@ -963,6 +969,14 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        // 백버튼 기능 제거
+        // 백버튼 두번 누를 시 종료
+        // Toast.LENGTH_SHORT의 길이는 2초이다. 그래서 2초 안에 다시 누르면 종료되게한다.
+        long backpressedTime = 0;
+        if (System.currentTimeMillis() > backpressedTime + 2000) {
+            backpressedTime = System.currentTimeMillis();
+            Toast.makeText(this, "\'뒤로\' 버튼을 한번 더 누르시면 종료됩니다.", Toast.LENGTH_SHORT).show();
+        } else if (System.currentTimeMillis() <= backpressedTime + 2000) {
+            finish();
+        }
     }
 }
