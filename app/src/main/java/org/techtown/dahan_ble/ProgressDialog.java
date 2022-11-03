@@ -2,7 +2,9 @@ package org.techtown.dahan_ble;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.view.View;
 import android.view.Window;
+import android.widget.Button;
 
 public class ProgressDialog extends Dialog {
     public ProgressDialog(Context context)
@@ -12,5 +14,13 @@ public class ProgressDialog extends Dialog {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.dialog_progress);
 
+        Button button = findViewById(R.id.button_exit);
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                android.os.Process.killProcess(android.os.Process.myPid()); // 앱 프로세스 종료
+            }
+        });
     }
 }

@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
 
     Dialog dialog;
 
-    ImageView btn_NewDeviceSearch, bluetoothstate1 ;
+    ImageView btn_NewDeviceSearch, bluetoothstate1;
     TextView tv_connect, tv_flow, tv_comp_state, tv_washstate, tv_washpower, tv_acctime, tv_resetcheck;
     TextView tv_runningtime, tv_alarm;
 
@@ -142,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         //프래그먼트 인플레이트
-        connectFragment = (ConnectFragment)getSupportFragmentManager().findFragmentById(R.id.connectFragment);
+        connectFragment = (ConnectFragment) getSupportFragmentManager().findFragmentById(R.id.connectFragment);
         connectFragment = new ConnectFragment();
         //settingFragment = (SettingFragment)getSupportFragmentManager().findFragmentById(R.id.settingFragment);
         settingFragment = new SettingFragment();
@@ -177,6 +177,8 @@ public class MainActivity extends AppCompatActivity {
         tv_runningtime = findViewById(R.id.tv_runningtime);
         tv_alarm = findViewById(R.id.tv_alarm);
 
+        //재접속 다이얼로그그
+        pd = new ProgressDialog(MainActivity.this);
 
         // BLE connect Callback
         BleConnectCallback bleConnectCallback = new BleConnectCallback() {
@@ -192,9 +194,9 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(int failCode, String info, BleDevice device) {
-                if(failCode == BleConnectCallback.FAIL_CONNECT_TIMEOUT){
+                if (failCode == BleConnectCallback.FAIL_CONNECT_TIMEOUT) {
                     //connection timeout
-                }else{
+                } else {
                     //connection fail due to other reasons
                 }
 
@@ -204,15 +206,21 @@ public class MainActivity extends AppCompatActivity {
             public void onConnected(BleDevice device) {
 
                 showToast("연결되었습니다.");
+
                 onFragmentChanged(1);
                 tv_connect.setText("true");
+                IwantDisconnect = false;
 
-                if(pd != null && pd.isShowing()) {
+                if (pd != null && pd.isShowing()) {
                     pd.dismiss();
                 }
 
-                if(dialog.isShowing()){
+                if (dialog.isShowing()) {
                     dialog.dismiss();
+                }
+
+                if (pd.isShowing()) {
+                    pd.dismiss();
                 }
 
 
@@ -241,123 +249,122 @@ public class MainActivity extends AppCompatActivity {
                             }
                             */
 
-                                // 데이터 파싱 시작
-                                String[] Ddata = Completely[1].split("_");   // ex) Ddata[0] = "--DAHAN-MCU", Ddata[1] = "29.40,1,1,1.50,15:30:28,0*25"
-                                Ddata[1].trim();
-                                String[] DDdata = Ddata[1].split("\\*");    // ex) DDdata[0] = "29.40,1,1,1.50,15:30:28,0", DDdata[1] = "25"
+                            // 데이터 파싱 시작
+                            String[] Ddata = Completely[1].split("_");   // ex) Ddata[0] = "--DAHAN-MCU", Ddata[1] = "29.40,1,1,1.50,15:30:28,0*25"
+                            Ddata[1].trim();
+                            String[] DDdata = Ddata[1].split("\\*");    // ex) DDdata[0] = "29.40,1,1,1.50,15:30:28,0", DDdata[1] = "25"
 
-                                //Log.d("DDdata : ", DDdata[0]);
-                                DDdata[0].trim();
-                                DDdata[1] = DDdata[1].replaceAll("(\r\n|\r|\n|\n\r)", "");  // \r\n 또는 \n\r 또는 \n 또는 \r을 찾아 공백으로 치환
-                                DDdata[1].trim();
-                                //Log.d("DDdata : ", DDdata[1]);
-                                int lenth = Integer.parseInt(DDdata[1]);
+                            //Log.d("DDdata : ", DDdata[0]);
+                            DDdata[0].trim();
+                            DDdata[1] = DDdata[1].replaceAll("(\r\n|\r|\n|\n\r)", "");  // \r\n 또는 \n\r 또는 \n 또는 \r을 찾아 공백으로 치환
+                            DDdata[1].trim();
+                            //Log.d("DDdata : ", DDdata[1]);
+                            int lenth = Integer.parseInt(DDdata[1]);
 
-                                if (DDdata[0].length() == lenth) {  // DDdata[0] = "29.40,1,1,1.50,15:30:28,0"
-                                    Log.d("판별 : ", "O 정상데이터");
-                                    String[] DDDdata = DDdata[0].split(",");    // ex) DDDdata[0]="29.40" DDDdata[1]="1" DDDdata[2]="1" DDDdata[3]="1.50" DDDdata[4]="15:30:28" DDDdata[5]="0"
-                                    double flow = Double.parseDouble(DDDdata[0]);
+                            if (DDdata[0].length() == lenth) {  // DDdata[0] = "29.40,1,1,1.50,15:30:28,0"
+                                Log.d("판별 : ", "O 정상데이터");
+                                String[] DDDdata = DDdata[0].split(",");    // ex) DDDdata[0]="29.40" DDDdata[1]="1" DDDdata[2]="1" DDDdata[3]="1.50" DDDdata[4]="15:30:28" DDDdata[5]="0"
+                                double flow = Double.parseDouble(DDDdata[0]);
 
-                                    //일단 받은 데이터는 메인액티비티의 텍스트뷰형식으로 전부 취합해둠
-                                    //유량 데이터
-                                    tv_flow.setText(DDDdata[0]);
+                                //일단 받은 데이터는 메인액티비티의 텍스트뷰형식으로 전부 취합해둠
+                                //유량 데이터
+                                tv_flow.setText(DDDdata[0]);
 
-                                    //컴프레셔전원상태
-                                    tv_comp_state.setText(DDDdata[1]);
+                                //컴프레셔전원상태
+                                tv_comp_state.setText(DDDdata[1]);
 
-                                    //배관세척진행상태
-                                    tv_washstate.setText(DDDdata[2]);
+                                //배관세척진행상태
+                                tv_washstate.setText(DDDdata[2]);
 
-                                    //솔벨브온오프주기(배관세척강도)
-                                    tv_washpower.setText(DDDdata[3]);
+                                //솔벨브온오프주기(배관세척강도)
+                                tv_washpower.setText(DDDdata[3]);
 
-                                    //배관 누적시간
-                                    tv_acctime.setText(DDDdata[4]);
+                                //배관 누적시간
+                                tv_acctime.setText(DDDdata[4]);
 
-                                    //누적시간 리셋확인
-                                    tv_resetcheck.setText(DDDdata[5]);
-                                    if (DDDdata[5].equals("1")) {
-                                        flowresetflag = false;
-                                        tv_runningtime.setText("00:00:00");
+                                //누적시간 리셋확인
+                                tv_resetcheck.setText(DDDdata[5]);
+                                if (DDDdata[5].equals("1")) {
+                                    flowresetflag = false;
+                                    tv_runningtime.setText("00:00:00");
+                                }
+
+                                if (sounds) {
+
+                                    int flowvalue = (int) (Float.parseFloat(tv_flow.getText().toString()));
+
+                                    String[] lmt2 = flow2.split(",");
+                                    String[] lmt3 = flow3.split(",");
+
+                                    if (Integer.parseInt(lmt2[1]) < flowvalue && Integer.parseInt(lmt3[1]) > flowvalue) {
+                                        tv_alarm.setText("0");
                                     }
 
-                                    if(sounds) {
-
-                                        int flowvalue = (int)(Float.parseFloat(tv_flow.getText().toString()));
-
-                                        String[] lmt2 = flow2.split(",");
-                                        String[] lmt3 = flow3.split(",");
-
-                                        if( Integer.parseInt(lmt2[1]) < flowvalue && Integer.parseInt(lmt3[1]) > flowvalue ) {
-                                            tv_alarm.setText("0");
-                                        }
-
-                                    }
-
-
-                                } else {
-                                    //Log.d("판별 : ", "X 비정상 데이터");
                                 }
 
 
-                                // 데이터를 재취합하여 보내보자
-                                // 컴프레셔전원명령,배관세척명령,솔벨브온오프주기설정값,배관세척 동작시간, 누적시간리셋여부 순이다.
-                                //String send_Data = "$--DAHAN-AND_1,1,0.5,35:12,1*15\r\n";
-                                String send_Data = "$--DAHAN-AND_";
+                            } else {
+                                //Log.d("판별 : ", "X 비정상 데이터");
+                            }
 
 
-                                //컴프레셔 전원명령 체크
-                                if (comp_control) {
-                                    send_Data = send_Data + "1,";
-                                } else {
-                                    send_Data = send_Data + "0,";
+                            // 데이터를 재취합하여 보내보자
+                            // 컴프레셔전원명령,배관세척명령,솔벨브온오프주기설정값,배관세척 동작시간, 누적시간리셋여부 순이다.
+                            //String send_Data = "$--DAHAN-AND_1,1,0.5,35:12,1*15\r\n";
+                            String send_Data = "$--DAHAN-AND_";
+
+
+                            //컴프레셔 전원명령 체크
+                            if (comp_control) {
+                                send_Data = send_Data + "1,";
+                            } else {
+                                send_Data = send_Data + "0,";
+                            }
+                            //배관 세척명령 체크
+                            if (wash_control) {
+                                send_Data = send_Data + "1,";
+                            } else {
+                                send_Data = send_Data + "0,";
+                            }
+                            //솔벨브온오프주기설정값 체크(cleanPower)
+                            if (radioButtoncheck.equals("0")) {
+                                send_Data = send_Data + cleanPower + ",";
+                            } else if (radioButtoncheck.equals("1")) {
+                                send_Data = send_Data + cleanPower2 + ",";
+                            } else if (radioButtoncheck.equals("2")) {
+                                send_Data = send_Data + cleanPower3 + ",";
+                            } else {
+                                send_Data = send_Data + cleanPower4 + ",";
+                            }
+
+                            //배관세척 동작시간 추가
+                            send_Data = send_Data + tv_runningtime.getText().toString() + ",";
+
+                            //누적시간 리셋   셋팅프래그먼트에서 초기화 요청시에 flowresetflag가 true로 변한다.
+                            if (flowresetflag) {
+                                send_Data = send_Data + "1";
+                            } else {
+                                send_Data = send_Data + "0";
+                            }
+
+                            send_Data = send_Data + "\r\n";
+
+
+                            byte[] send = send_Data.getBytes();
+
+                            bleManager.write(device, "0000FFE0-0000-1000-8000-00805F9B34FB", "0000FFE1-0000-1000-8000-00805F9B34FB", send, new BleWriteCallback() {
+                                @Override
+                                public void onWriteSuccess(byte[] data, BleDevice device) {
+                                    String temp = "";
+                                    temp = new String(data);
+                                    Log.d("Send Data : ", temp);
                                 }
-                                //배관 세척명령 체크
-                                if (wash_control) {
-                                    send_Data = send_Data + "1,";
-                                } else {
-                                    send_Data = send_Data + "0,";
+
+                                @Override
+                                public void onFailure(int failCode, String info, BleDevice device) {
+
                                 }
-                                //솔벨브온오프주기설정값 체크(cleanPower)
-                                if (radioButtoncheck.equals("0")) {
-                                    send_Data = send_Data + cleanPower + ",";
-                                } else if (radioButtoncheck.equals("1")) {
-                                    send_Data = send_Data + cleanPower2 + ",";
-                                } else if (radioButtoncheck.equals("2")) {
-                                    send_Data = send_Data + cleanPower3 + ",";
-                                } else {
-                                    send_Data = send_Data + cleanPower4 + ",";
-                                }
-
-                                //배관세척 동작시간 추가
-                                send_Data = send_Data + tv_runningtime.getText().toString() + ",";
-
-                                //누적시간 리셋   셋팅프래그먼트에서 초기화 요청시에 flowresetflag가 true로 변한다.
-                                if (flowresetflag) {
-                                    send_Data = send_Data + "1";
-                                } else {
-                                    send_Data = send_Data + "0";
-                                }
-
-                                send_Data = send_Data + "\r\n";
-
-
-                                byte[] send = send_Data.getBytes();
-
-                                bleManager.write(device, "0000FFE0-0000-1000-8000-00805F9B34FB", "0000FFE1-0000-1000-8000-00805F9B34FB", send, new BleWriteCallback() {
-                                    @Override
-                                    public void onWriteSuccess(byte[] data, BleDevice device) {
-                                        String temp = "";
-                                        temp = new String(data);
-                                        Log.d("Send Data : ", temp);
-                                    }
-
-                                    @Override
-                                    public void onFailure(int failCode, String info, BleDevice device) {
-
-                                    }
-                                });
-
+                            });
 
 
                         } catch (Exception e) {
@@ -386,13 +393,21 @@ public class MainActivity extends AppCompatActivity {
                 });
 
             }
+
             @Override
             public void onDisconnected(String info, int status, BleDevice device) {
                 showToast("연결이 해제되었습니다.");
+
                 tv_connect.setText("false");
-                if(MainActivity.sounds) {
+                if (MainActivity.sounds) {
                     //sounds가 true인 경우에 스탑
                     soundStop();
+                }
+
+                if (!IwantDisconnect) {
+                    pd.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                    pd.setCancelable(false);
+                    pd.show();
                 }
 
             }
@@ -403,107 +418,90 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
+
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
             }
+
             @Override
             public void afterTextChanged(Editable s) {
 
-                if(!IwantDisconnect){
-                    if (tv_connect.getText().toString().equals("false")) {
-                        pd = new ProgressDialog(MainActivity.this);
-                        pd.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-                        pd.show();
-                        //showToast("1차 시도");
-                        bleManager.connect(connectedDeviceMacAddress, bleConnectCallback);
-                    }
-                    try {
-                        Thread.sleep(2000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    if (tv_connect.getText().toString().equals("false")) {
-                        //showToast("2차 시도");
-                        bleManager.connect(connectedDeviceMacAddress, bleConnectCallback);
-                    }
-                    try {
-                        Thread.sleep(2000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    if (tv_connect.getText().toString().equals("false")) {
-                        //showToast("3차 시도");
-                        bleManager.connect(connectedDeviceMacAddress, bleConnectCallback);
-                    }
-                    try {
-                        Thread.sleep(2000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    if (tv_connect.getText().toString().equals("false")) {
-                        //showToast("4차 시도");
-                        bleManager.connect(connectedDeviceMacAddress, bleConnectCallback);
-                    }
-                    try {
-                        Thread.sleep(2000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    if (tv_connect.getText().toString().equals("false")) {
-                        //showToast("5차 시도");
-                        bleManager.connect(connectedDeviceMacAddress, bleConnectCallback);
-                    }
-                    try {
-                        Thread.sleep(2000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    if (tv_connect.getText().toString().equals("false")) {
-                        //showToast("6차 시도");
-                        bleManager.connect(connectedDeviceMacAddress, bleConnectCallback);
-                    }
-                    try {
-                        Thread.sleep(2000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    if (tv_connect.getText().toString().equals("false")) {
-                        //showToast("7차 시도");
-                        bleManager.connect(connectedDeviceMacAddress, bleConnectCallback);
-                    }
-                    try {
-                        Thread.sleep(2000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    if (tv_connect.getText().toString().equals("false")) {
-                        //showToast("8차 시도");
-                        bleManager.connect(connectedDeviceMacAddress, bleConnectCallback);
-                    }
-                    try {
-                        Thread.sleep(2000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    if (tv_connect.getText().toString().equals("false")) {
-                        //showToast("9차 시도");
-                        bleManager.connect(connectedDeviceMacAddress, bleConnectCallback);
-                    }
-                    try {
-                        Thread.sleep(2000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    if (tv_connect.getText().toString().equals("false")) {
-                        //showToast("10차 시도");
-                        bleManager.connect(connectedDeviceMacAddress, bleConnectCallback);
-                    }
-                }
 
+                if (!IwantDisconnect) {
+
+                    //1차 시도
+                    if (tv_connect.getText().toString().equals("false")) {
+                        bleManager.connect(connectedDeviceMacAddress, bleConnectCallback);
+                    }
+
+
+                    //2차 시도
+                    if (tv_connect.getText().toString().equals("false")) {
+                        bleManager.connect(connectedDeviceMacAddress, bleConnectCallback);
+                    }
+
+
+                    //3차 시도
+                    if (tv_connect.getText().toString().equals("false")) {
+                        bleManager.connect(connectedDeviceMacAddress, bleConnectCallback);
+                    }
+
+
+                    //4차 시도
+                    if (tv_connect.getText().toString().equals("false")) {
+                        bleManager.connect(connectedDeviceMacAddress, bleConnectCallback);
+                    }
+
+
+                    //5차 시도
+                    if (tv_connect.getText().toString().equals("false")) {
+                        bleManager.connect(connectedDeviceMacAddress, bleConnectCallback);
+                    }
+
+
+                    //6차 시도
+                    if (tv_connect.getText().toString().equals("false")) {
+                        bleManager.connect(connectedDeviceMacAddress, bleConnectCallback);
+                    }
+
+
+                    //7차 시도
+                    if (tv_connect.getText().toString().equals("false")) {
+                        bleManager.connect(connectedDeviceMacAddress, bleConnectCallback);
+                    }
+
+
+                    //8차 시도
+                    if (tv_connect.getText().toString().equals("false")) {
+                        bleManager.connect(connectedDeviceMacAddress, bleConnectCallback);
+                    }
+
+
+                    //9차 시도
+                    if (tv_connect.getText().toString().equals("false")) {
+                        bleManager.connect(connectedDeviceMacAddress, bleConnectCallback);
+                    }
+
+                    //10차 시도
+                    if (tv_connect.getText().toString().equals("false")) {
+                        bleManager.connect(connectedDeviceMacAddress, bleConnectCallback);
+                    }
+
+
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            // TODO Auto-generated method stub
+                            while (tv_connect.getText().toString().equals("false")) {
+                                bleManager.connect(connectedDeviceMacAddress, bleConnectCallback);
+                            }
+                        }
+                    }).start();
+
+
+                }
             }
         });
-
-
 
 
         // 새로운 기기 검색 버튼 클릭 이벤트(다이얼로그의 시작)~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -529,7 +527,7 @@ public class MainActivity extends AppCompatActivity {
                             if (device.address.equals(d.address)) {
                                 return;
                             }
-                            if(device.name.equals("unknown")){
+                            if (device.name.equals("unknown")) {
                                 return;
                             }
                         }
@@ -572,7 +570,7 @@ public class MainActivity extends AppCompatActivity {
                                     if (device.address.equals(d.address)) {
                                         return;
                                     }
-                                    if(device.name.equals("unknown")){
+                                    if (device.name.equals("unknown")) {
                                         return;
                                     }
                                 }
@@ -618,7 +616,6 @@ public class MainActivity extends AppCompatActivity {
                         builder.setTitle("블루투스 연결").setMessage(item.getName() + " 에 연결하시겠습니까?");
 
 
-
                         builder.setPositiveButton("연결", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog2, int id) {
@@ -651,7 +648,6 @@ public class MainActivity extends AppCompatActivity {
                 });
 
 
-
                 btn_dialog_exit.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -668,12 +664,6 @@ public class MainActivity extends AppCompatActivity {
                 dialog.show();
             }
         }); // (다이얼로그의 끝)~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-
-
-
-
 
 
     }//=========================================================================================================================================
@@ -708,15 +698,15 @@ public class MainActivity extends AppCompatActivity {
         // SHaredPreferences 객체.get타입(저장된 이름, 기본값)
         // 저장된 이름이 존재하지 않을 시 기본값
 
-        mode = appData.getString("mode","0");  // 메인화면 테마 설정(0 = 디지털 모드, 1 = 아날로그 모드)
-        autoCompressure = appData.getString("autoCompressure","0");   // 컴프레셔 자동동작(0 = 자동동작 x, 1 = 자동동작 o, default = 0)
-        flow1 = appData.getString("flow1","0,10");    // 유량계 오동작 알람설정(0 = off, 1 = on, 뒤에 숫자는 주기[초])
-        flow2 = appData.getString("flow2","0,1");    // 유량계 최소값 모니터링(0 = off, 1 = on, 뒤에 숫자는 주기[초])
-        flow3 = appData.getString("flow3","0,60");    // 유량계 최댓값 모니터링(0 = off, 1 = on, 뒤에 숫자는 주기[초])
-        cleanPower = appData.getString("cleanPower","0.5");   // 세척강도
-        cleanPower2 = appData.getString("cleanPower2","1.0");   // 세척강도2
-        cleanPower3 = appData.getString("cleanPower3","2.0");   // 세척강도3
-        cleanPower4 = appData.getString("cleanPower4","3.0");   // 세척강도3
+        mode = appData.getString("mode", "0");  // 메인화면 테마 설정(0 = 디지털 모드, 1 = 아날로그 모드)
+        autoCompressure = appData.getString("autoCompressure", "0");   // 컴프레셔 자동동작(0 = 자동동작 x, 1 = 자동동작 o, default = 0)
+        flow1 = appData.getString("flow1", "0,10");    // 유량계 오동작 알람설정(0 = off, 1 = on, 뒤에 숫자는 주기[초])
+        flow2 = appData.getString("flow2", "0,1");    // 유량계 최소값 모니터링(0 = off, 1 = on, 뒤에 숫자는 주기[초])
+        flow3 = appData.getString("flow3", "0,60");    // 유량계 최댓값 모니터링(0 = off, 1 = on, 뒤에 숫자는 주기[초])
+        cleanPower = appData.getString("cleanPower", "0.5");   // 세척강도
+        cleanPower2 = appData.getString("cleanPower2", "1.0");   // 세척강도2
+        cleanPower3 = appData.getString("cleanPower3", "2.0");   // 세척강도3
+        cleanPower4 = appData.getString("cleanPower4", "3.0");   // 세척강도3
 
 
     }
@@ -736,24 +726,32 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<Item> items = new ArrayList<Item>();
 
         @Override
-        public int getCount() { return items.size(); }
+        public int getCount() {
+            return items.size();
+        }
 
-        public void addItem(Item item) { items.add(item);}
+        public void addItem(Item item) {
+            items.add(item);
+        }
 
         @Override
-        public Object getItem(int position) { return items.get(position); }
+        public Object getItem(int position) {
+            return items.get(position);
+        }
 
         @Override
-        public long getItemId(int position) { return position; }
+        public long getItemId(int position) {
+            return position;
+        }
 
         //어댑터가 데이터를 관리하고 뷰도 만듬
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             ItemView itemView = null;
-            if(convertView == null) {
+            if (convertView == null) {
                 itemView = new ItemView(getApplicationContext());
-            }else {
-                itemView = (ItemView)convertView;
+            } else {
+                itemView = (ItemView) convertView;
             }
             Item item = items.get(position);
             itemView.setName(item.getName());
@@ -776,7 +774,7 @@ public class MainActivity extends AppCompatActivity {
                     Date CurrentTime = simple.parse(time);
 
                     // 한국시간은 9시간 보정을 받기때문에 9시간을 밀리세크로 계산해서 빼준다.
-                    long seconds = (CurrentTime.getTime()-ActionStartTime.getTime()) - (long)(32400000);
+                    long seconds = (CurrentTime.getTime() - ActionStartTime.getTime()) - (long) (32400000);
 
                     String runtime = (String) simple.format(new Timestamp(seconds));
 
@@ -792,10 +790,11 @@ public class MainActivity extends AppCompatActivity {
         Runnable task = new Runnable() {
             @Override
             public void run() {
-                while(actionflag) {
-                    try{
+                while (actionflag) {
+                    try {
                         Thread.sleep(1000);
-                    }catch (InterruptedException e){}
+                    } catch (InterruptedException e) {
+                    }
                     handler.sendEmptyMessage(1); //핸들러 호출 = 시간 갱신
                 }
             }
@@ -815,23 +814,23 @@ public class MainActivity extends AppCompatActivity {
                     String[] limit = flow1.split(",");
                     int lmt = Integer.parseInt(limit[1]);
 
-                    int flowvalue = (int)(Float.parseFloat(tv_flow.getText().toString()));
+                    int flowvalue = (int) (Float.parseFloat(tv_flow.getText().toString()));
 
-                    if(flowvalue < 1) { //  Alarm 조건1 : Flowmeter Fault Alarm, 배관 세척 On 이후 X초 이내 유량계 신호가 0 이상 되지 않을때 알람
+                    if (flowvalue < 1) { //  Alarm 조건1 : Flowmeter Fault Alarm, 배관 세척 On 이후 X초 이내 유량계 신호가 0 이상 되지 않을때 알람
                         heartbeat1++;
 
                     } else {
                         heartbeat1 = 0;
                     }
 
-                    if(lmt < heartbeat1) {
+                    if (lmt < heartbeat1) {
                         // Alarm 조건1 : Flowmeter Fault Alarm
                         tv_alarm.setText("1");      // tv_alarm가 "0"일 경우 알람 X,    "1"일 경우 알람 O.
                     } else {
                         String[] lmt2 = flow2.split(",");
                         String[] lmt3 = flow3.split(",");
-                        if(Integer.parseInt(lmt2[1]) < flowvalue && Integer.parseInt(lmt3[1]) > flowvalue) {
-                            if(sounds) {
+                        if (Integer.parseInt(lmt2[1]) < flowvalue && Integer.parseInt(lmt3[1]) > flowvalue) {
+                            if (sounds) {
                                 tv_alarm.setText("0");
                             }
                         }
@@ -848,10 +847,11 @@ public class MainActivity extends AppCompatActivity {
         Runnable task1 = new Runnable() {
             @Override
             public void run() {
-                while(actionflag) {
-                    try{
+                while (actionflag) {
+                    try {
                         Thread.sleep(1000);
-                    }catch (InterruptedException e){}
+                    } catch (InterruptedException e) {
+                    }
                     handler1.sendEmptyMessage(1); //핸들러 호출 = 시간 갱신
                 }
             }
@@ -870,11 +870,11 @@ public class MainActivity extends AppCompatActivity {
                     String[] limit = flow2.split(",");
                     int lmt = Integer.parseInt(limit[1]);
 
-                    int flowvalue = (int)(Float.parseFloat(tv_flow.getText().toString()));
+                    int flowvalue = (int) (Float.parseFloat(tv_flow.getText().toString()));
 
-                    if(heartbeat2 > 10) { //  Alarm 조건2 : Flowmeter Low Alarm, 배관 세척 On 이후 유량계 신호가 입력한 값 이하로 떨어졌을 때 알람
+                    if (heartbeat2 > 10) { //  Alarm 조건2 : Flowmeter Low Alarm, 배관 세척 On 이후 유량계 신호가 입력한 값 이하로 떨어졌을 때 알람
                         // 배관세척 동작 10초 이후에 정해진 값보다 유량이 낮게 나올시 알림
-                        if(flowvalue < lmt) {
+                        if (flowvalue < lmt) {
                             tv_alarm.setText("1");      // tv_alarm가 "0"일 경우 알람 X,    "1"일 경우 알람 O.
                         }
                     }
@@ -892,10 +892,11 @@ public class MainActivity extends AppCompatActivity {
         Runnable task2 = new Runnable() {
             @Override
             public void run() {
-                while(actionflag) {
-                    try{
+                while (actionflag) {
+                    try {
                         Thread.sleep(1000);
-                    }catch (InterruptedException e){}
+                    } catch (InterruptedException e) {
+                    }
                     handler2.sendEmptyMessage(1); //핸들러 호출 = 시간 갱신
                 }
             }
@@ -914,9 +915,9 @@ public class MainActivity extends AppCompatActivity {
                     String[] limit = flow3.split(",");
                     int lmt3 = Integer.parseInt(limit[1]);
 
-                    int flowvalue = (int)(Float.parseFloat(tv_flow.getText().toString()));
+                    int flowvalue = (int) (Float.parseFloat(tv_flow.getText().toString()));
 
-                    if(lmt3 < flowvalue) { //  Alarm 조건3 : Flowmeter High Alarm , 배관 세척 On 이후 유량계 신호가 입력한 값을 초과 하였을 때 알람
+                    if (lmt3 < flowvalue) { //  Alarm 조건3 : Flowmeter High Alarm , 배관 세척 On 이후 유량계 신호가 입력한 값을 초과 하였을 때 알람
                         // 배관세척 동작 이후 제한값 초과시 알람
                         tv_alarm.setText("1");      // tv_alarm가 "0"일 경우 알람 X,    "1"일 경우 알람 O.
                     }
@@ -932,10 +933,11 @@ public class MainActivity extends AppCompatActivity {
         Runnable task3 = new Runnable() {
             @Override
             public void run() {
-                while(actionflag) {
-                    try{
+                while (actionflag) {
+                    try {
                         Thread.sleep(1000);
-                    }catch (InterruptedException e){}
+                    } catch (InterruptedException e) {
+                    }
                     handler3.sendEmptyMessage(1); //핸들러 호출 = 시간 갱신
                 }
             }
@@ -946,11 +948,10 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void DisconnectBLE() {
-        if(!connectedDeviceMacAddress.equals(null)){
+        if (!connectedDeviceMacAddress.equals(null)) {
+            IwantDisconnect = true;
             onFragmentChanged(0);
-            IwantDisconnect =true;
             bleManager.disconnectAll();
-            IwantDisconnect =false;
 
             startActivity(new Intent(getApplicationContext(), MainActivity.class));
         }
@@ -961,6 +962,7 @@ public class MainActivity extends AppCompatActivity {
         MySoundPlayer.play(MySoundPlayer.Pager_Beeps);
         sounds = true;
     }
+
     public void soundStop() {
         MySoundPlayer.stop();
         sounds = false;
@@ -969,14 +971,29 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        // 백버튼 두번 누를 시 종료
-        // Toast.LENGTH_SHORT의 길이는 2초이다. 그래서 2초 안에 다시 누르면 종료되게한다.
-        long backpressedTime = 0;
-        if (System.currentTimeMillis() > backpressedTime + 2000) {
-            backpressedTime = System.currentTimeMillis();
-            Toast.makeText(this, "\'뒤로\' 버튼을 한번 더 누르시면 종료됩니다.", Toast.LENGTH_SHORT).show();
-        } else if (System.currentTimeMillis() <= backpressedTime + 2000) {
-            finish();
-        }
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setTitle("어플리케이션 종료").setMessage("앱을 종료하시겠습니까?");
+
+        builder.setPositiveButton("종료", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int id) {
+                moveTaskToBack(true); // 태스크를 백그라운드로 이동
+                finishAndRemoveTask(); // 액티비티 종료 + 태스크 리스트에서 지우기
+                android.os.Process.killProcess(android.os.Process.myPid()); // 앱 프로세스 종료
+            }
+        });
+
+        builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int id) {
+
+            }
+        });
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
+
+
 }

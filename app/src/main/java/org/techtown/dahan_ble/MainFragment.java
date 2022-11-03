@@ -23,6 +23,7 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
@@ -404,6 +405,7 @@ public class MainFragment extends Fragment {
             public void afterTextChanged(Editable s) {
             }
         });
+
 
 
 

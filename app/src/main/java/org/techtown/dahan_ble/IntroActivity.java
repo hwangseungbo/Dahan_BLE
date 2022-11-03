@@ -224,6 +224,5 @@ public class IntroActivity extends AppCompatActivity {
     public void onBackPressed(){
         super.onBackPressed();
         handler.removeCallbacks(runnable);
-
     }
 }
