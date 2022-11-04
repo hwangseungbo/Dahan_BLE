@@ -105,6 +105,7 @@ public class SettingFragment extends Fragment {
         }else if( ((MainActivity)getActivity()).autoCompressure.equals("1") ){
             fr_sw_autocomp.setChecked(true);
         }
+
         // <알람설정>
         String[] flow1 = ((MainActivity)getActivity()).flow1.split(",");
         String[] flow2 = ((MainActivity)getActivity()).flow2.split(",");
@@ -469,12 +470,7 @@ public class SettingFragment extends Fragment {
                     fr_btn_analog.setBackgroundResource(R.drawable.analog_button_on);
                     fr_btn_digital.setBackgroundResource(R.drawable.digital_button_off);
                 }
-                // <컴프레셔 자동 동작 설정>
-                if( ((MainActivity)getActivity()).autoCompressure.equals("0") ){
-                    fr_sw_autocomp.setChecked(false);
-                }else if( ((MainActivity)getActivity()).autoCompressure.equals("1") ){
-                    fr_sw_autocomp.setChecked(true);
-                }
+
                 // <알람설정>
                 String[] flow1 = ((MainActivity)getActivity()).flow1.split(",");
                 String[] flow2 = ((MainActivity)getActivity()).flow2.split(",");
@@ -523,6 +519,7 @@ public class SettingFragment extends Fragment {
                 ((MainActivity)getActivity()).showToast( "저장 되었습니다.");
             }
         });
+
 
         fr_btn_exit.setOnClickListener(new View.OnClickListener() {
             @Override

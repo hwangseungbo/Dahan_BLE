@@ -67,7 +67,6 @@ public class MainActivity extends AppCompatActivity {
 
     ProgressDialog pd;
 
-
     // 어플리케이션 설정파일 관련 (_default 가 붙은 값은 초기화시 초기값으로 이용)
     private SharedPreferences appData;
     public static String devName;
@@ -113,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
     Dialog dialog;
 
     ImageView btn_NewDeviceSearch, bluetoothstate1;
-    TextView tv_connect, tv_flow, tv_comp_state, tv_washstate, tv_washpower, tv_acctime, tv_resetcheck;
+    TextView tv_connect, tv_flow, tv_comp_state, tv_washstate, tv_washpower, tv_acctime, tv_resetcheck, tv_autoCompressure;
     TextView tv_runningtime, tv_alarm;
 
     @Override
@@ -177,6 +176,7 @@ public class MainActivity extends AppCompatActivity {
         tv_runningtime = findViewById(R.id.tv_runningtime);
         tv_alarm = findViewById(R.id.tv_alarm);
 
+
         //재접속 다이얼로그그
         pd = new ProgressDialog(MainActivity.this);
 
@@ -215,13 +215,14 @@ public class MainActivity extends AppCompatActivity {
                     pd.dismiss();
                 }
 
-                if (dialog.isShowing()) {
+                if (dialog!= null && dialog.isShowing()) {
                     dialog.dismiss();
                 }
 
                 if (pd.isShowing()) {
                     pd.dismiss();
                 }
+
 
 
                 // ※※※ UUID of HC-42: Search UUID: FFF0, service UUID: FFE0, transparent transmission data UUID: FFE1.
@@ -666,6 +667,8 @@ public class MainActivity extends AppCompatActivity {
         }); // (다이얼로그의 끝)~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
+
+
     }//=========================================================================================================================================
 
     public void showToast(String para) {
@@ -703,13 +706,13 @@ public class MainActivity extends AppCompatActivity {
         flow1 = appData.getString("flow1", "0,10");    // 유량계 오동작 알람설정(0 = off, 1 = on, 뒤에 숫자는 주기[초])
         flow2 = appData.getString("flow2", "0,1");    // 유량계 최소값 모니터링(0 = off, 1 = on, 뒤에 숫자는 주기[초])
         flow3 = appData.getString("flow3", "0,60");    // 유량계 최댓값 모니터링(0 = off, 1 = on, 뒤에 숫자는 주기[초])
-        cleanPower = appData.getString("cleanPower", "0.5");   // 세척강도
+        cleanPower = appData.getString("cleanPower", "0.5");     // 세척강도
         cleanPower2 = appData.getString("cleanPower2", "1.0");   // 세척강도2
         cleanPower3 = appData.getString("cleanPower3", "2.0");   // 세척강도3
         cleanPower4 = appData.getString("cleanPower4", "3.0");   // 세척강도3
 
-
     }
+
 
     public void onFragmentChanged(int index) {
         if (index == 0) {

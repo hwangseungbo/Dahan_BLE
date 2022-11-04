@@ -6,6 +6,8 @@ import android.content.res.ColorStateList;
 import android.media.Image;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
@@ -18,6 +20,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -34,6 +37,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class MainFragment extends Fragment {
+
 
 
     @Override
@@ -73,7 +77,7 @@ public class MainFragment extends Fragment {
         RadioButton rb_cleanpower4 = (RadioButton) rootView.findViewById(R.id.rb_cleanpower4);
 
         //이니셜라이징
-        if( ((MainActivity)getActivity()).mode.equals("0") ){
+        if (((MainActivity) getActivity()).mode.equals("0")) {
             // mode 값이 0일 경우 디지털 방식
             mainfrag_background.setImageResource(R.drawable.mainfrag_back_digital);
             fr_tv_flow.setVisibility(fr_tv_flow.VISIBLE);
@@ -82,7 +86,7 @@ public class MainFragment extends Fragment {
             mainfrag_analog_gauge.setVisibility(mainfrag_analog_gauge.INVISIBLE);
             analog_gauge_needle.setVisibility(analog_gauge_needle.INVISIBLE);
 
-        } else if ( ((MainActivity)getActivity()).mode.equals("1") ) {
+        } else if (((MainActivity) getActivity()).mode.equals("1")) {
             // mode 값이 1일 경우 아날로그 방식
             mainfrag_background.setImageResource(R.drawable.mainfrag_back_analog);
             fr_tv_flow.setVisibility(fr_tv_flow.INVISIBLE);
@@ -102,13 +106,15 @@ public class MainFragment extends Fragment {
             50	        90
             60	        135
             */
-
         }
-        if(tv_connect.getText().toString().equals("true")) {
+
+        if (tv_connect.getText().toString().equals("true")) {
             iv_bluetoothstate.setImageResource(R.drawable.ble_on);
         } else {
             iv_bluetoothstate.setImageResource(R.drawable.ble_off);
         }
+
+        /*
         if(((MainActivity)getActivity()).comp_control) {
             fr_sw_comp.setChecked(true);
             fr_sw_wash.setEnabled(true);
@@ -116,124 +122,172 @@ public class MainFragment extends Fragment {
             fr_sw_comp.setChecked(false);
             fr_sw_wash.setChecked((false));
             fr_sw_wash.setEnabled(false);
+        }*/
 
+        if (((MainActivity) getActivity()).comp_control) {
+            fr_sw_comp.setChecked(true);
+            fr_sw_wash.setEnabled(true);
         }
-        if(((MainActivity)getActivity()).wash_control) {
+
+        if (((MainActivity) getActivity()).autoCompressure.equals("1")) {
+            ((MainActivity) getActivity()).comp_control = true;
+            fr_sw_comp.setChecked(true);
+            fr_sw_wash.setEnabled(true);
+
+        } else {
+            ((MainActivity) getActivity()).comp_control = false;
+            fr_sw_comp.setChecked(false);
+            fr_sw_wash.setEnabled(false);
+        }
+
+        if (((MainActivity) getActivity()).comp_control) {
+            fr_sw_comp.setChecked(true);
+        } else {
+            fr_sw_comp.setChecked(false);
+        }
+
+
+        if (((MainActivity) getActivity()).wash_control) {
             fr_sw_wash.setChecked(true);
         } else {
             fr_sw_wash.setChecked(false);
         }
         fr_tv_action_time.setText(tv_runningtime.getText().toString());
         fr_tv_acc_time.setText(tv_acctime.getText().toString());
-        rb_cleanpower.setText(((MainActivity)getActivity()).cleanPower);
-        rb_cleanpower2.setText(((MainActivity)getActivity()).cleanPower2);
-        rb_cleanpower3.setText(((MainActivity)getActivity()).cleanPower3);
-        rb_cleanpower4.setText(((MainActivity)getActivity()).cleanPower4);
+        rb_cleanpower.setText(((MainActivity) getActivity()).cleanPower);
+        rb_cleanpower2.setText(((MainActivity) getActivity()).cleanPower2);
+        rb_cleanpower3.setText(((MainActivity) getActivity()).cleanPower3);
+        rb_cleanpower4.setText(((MainActivity) getActivity()).cleanPower4);
 
         rb_cleanpower.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((MainActivity)getActivity()).radioButtoncheck = "0";
+                ((MainActivity) getActivity()).radioButtoncheck = "0";
             }
         });
         rb_cleanpower2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((MainActivity)getActivity()).radioButtoncheck = "1";
+                ((MainActivity) getActivity()).radioButtoncheck = "1";
             }
         });
         rb_cleanpower3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((MainActivity)getActivity()).radioButtoncheck = "2";
+                ((MainActivity) getActivity()).radioButtoncheck = "2";
             }
         });
         rb_cleanpower4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((MainActivity)getActivity()).radioButtoncheck = "3";
+                ((MainActivity) getActivity()).radioButtoncheck = "3";
             }
         });
-        //오토컴프가 켜져있을 경우 자동으로 콤프스위치 온
-        if(((MainActivity)getActivity()).autoCompressure.equals("1"))
-        {
-            fr_sw_comp.setChecked(true);
-            ((MainActivity)getActivity()).comp_control=true;
-            fr_sw_wash.setEnabled(true);
-        }
 
-
+/*
         fr_sw_comp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(fr_sw_comp.isChecked()){
-                    ((MainActivity)getActivity()).comp_control=true;
+                if (fr_sw_comp.isChecked()) {
+                    ((MainActivity) getActivity()).comp_control = true;
                     fr_sw_wash.setEnabled(true);
 
                 } else {
-                    ((MainActivity)getActivity()).comp_control=false;
+                    ((MainActivity) getActivity()).comp_control = false;
                     fr_sw_wash.setChecked(false);
                     fr_sw_wash.setEnabled(false);
-                    ((MainActivity)getActivity()).actionflag = false;   // 동작시간 타이머를 세는 쓰레드를 중지시키는 플래그
-                    ((MainActivity)getActivity()).wash_control=false;
+                    ((MainActivity) getActivity()).actionflag = false;   // 동작시간 타이머를 세는 쓰레드를 중지시키는 플래그
+                    ((MainActivity) getActivity()).wash_control = false;
                     btn_setting.setEnabled(true);
                     //tv_alarm.setText("0");
                     fr_iv_post.setImageResource(R.drawable.action_state_nosign);
 
-                    if(((MainActivity)getActivity()).sounds) {
+                    if (((MainActivity) getActivity()).sounds) {
                         fr_iv_post.setImageResource(R.drawable.action_state_stop);
                     }
                     //((MainActivity)getActivity()).sounds = false;
-                    ((MainActivity)getActivity()).heartbeat1 = 0;
-                    ((MainActivity)getActivity()).heartbeat2 = 0;
+                    ((MainActivity) getActivity()).heartbeat1 = 0;
+                    ((MainActivity) getActivity()).heartbeat2 = 0;
+                }
+            }
+        });
+*/
+        fr_sw_comp.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    //on일때 함수
+                    ((MainActivity) getActivity()).comp_control = true;
+                    fr_sw_wash.setEnabled(true);
+                }
+
+                else{
+                    //off 일때 함수
+                    ((MainActivity) getActivity()).comp_control = false;
+                    fr_sw_wash.setChecked(false);
+                    fr_sw_wash.setEnabled(false);
+                    ((MainActivity) getActivity()).actionflag = false;   // 동작시간 타이머를 세는 쓰레드를 중지시키는 플래그
+                    ((MainActivity) getActivity()).wash_control = false;
+                    btn_setting.setEnabled(true);
+                    //tv_alarm.setText("0");
+                    fr_iv_post.setImageResource(R.drawable.action_state_nosign);
+
+                    if (((MainActivity) getActivity()).sounds) {
+                        fr_iv_post.setImageResource(R.drawable.action_state_stop);
+                    }
+                    //((MainActivity)getActivity()).sounds = false;
+                    ((MainActivity) getActivity()).heartbeat1 = 0;
+                    ((MainActivity) getActivity()).heartbeat2 = 0;
                 }
             }
         });
 
+
         fr_sw_wash.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(fr_sw_wash.isChecked()){
+                if (fr_sw_wash.isChecked()) {
                     fr_tv_action_time.setText("00:00:00");
-                    ((MainActivity)getActivity()).wash_control=true;
+                    ((MainActivity) getActivity()).wash_control = true;
                     SimpleDateFormat simple = new SimpleDateFormat("HH:mm:ss");
                     Date date = new Date();
                     String actiontime = simple.format(date);
-                    ((MainActivity)getActivity()).actionflag = true;
-                    ((MainActivity)getActivity()).ShowTimeMethod(actiontime);
+                    ((MainActivity) getActivity()).actionflag = true;
+                    ((MainActivity) getActivity()).ShowTimeMethod(actiontime);
                     btn_setting.setEnabled(false);
 
-                    String[] check1 = ((MainActivity)getActivity()).flow1.split(",");
-                    if(check1[0].equals("1")) {      //알람이 켜져있을경우 쓰레드 굴림
-                        ((MainActivity)getActivity()).Alarm1();
+                    String[] check1 = ((MainActivity) getActivity()).flow1.split(",");
+                    if (check1[0].equals("1")) {      //알람이 켜져있을경우 쓰레드 굴림
+                        ((MainActivity) getActivity()).Alarm1();
                     }
-                    String[] check2 = ((MainActivity)getActivity()).flow2.split(",");
-                    if(check2[0].equals("1")) {      //알람이 켜져있을경우 쓰레드 굴림
-                        ((MainActivity)getActivity()).Alarm2();
+                    String[] check2 = ((MainActivity) getActivity()).flow2.split(",");
+                    if (check2[0].equals("1")) {      //알람이 켜져있을경우 쓰레드 굴림
+                        ((MainActivity) getActivity()).Alarm2();
                     }
-                    String[] check3 = ((MainActivity)getActivity()).flow3.split(",");
-                    if(check3[0].equals("1")) {      //알람이 켜져있을경우 쓰레드 굴림
-                        ((MainActivity)getActivity()).Alarm3();
+                    String[] check3 = ((MainActivity) getActivity()).flow3.split(",");
+                    if (check3[0].equals("1")) {      //알람이 켜져있을경우 쓰레드 굴림
+                        ((MainActivity) getActivity()).Alarm3();
                     }
                 } else {
-                    ((MainActivity)getActivity()).wash_control=false;
-                    ((MainActivity)getActivity()).actionflag = false;
+                    ((MainActivity) getActivity()).wash_control = false;
+                    ((MainActivity) getActivity()).actionflag = false;
                     //tv_alarm.setText("0");
                     fr_iv_post.setImageResource(R.drawable.action_state_nosign);
 
-                    if(((MainActivity)getActivity()).sounds) {
+                    if (((MainActivity) getActivity()).sounds) {
                         fr_iv_post.setImageResource(R.drawable.action_state_stop);
                     }
                     //((MainActivity)getActivity()).sounds = false;
 
-                    ((MainActivity)getActivity()).heartbeat1 = 0;
-                    ((MainActivity)getActivity()).heartbeat2 = 0;
+                    ((MainActivity) getActivity()).heartbeat1 = 0;
+                    ((MainActivity) getActivity()).heartbeat2 = 0;
                     btn_setting.setEnabled(true);
 
                     //fr_tv_action_time.setText("00:00:00");
                 }
             }
         });
+
 
         btn_setting.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -247,23 +301,25 @@ public class MainFragment extends Fragment {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
+
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 // tv_alarm가 "0"일 경우 알람 X,    "1"일 경우 알람 O.
-                if(tv_alarm.getText().toString().equals("1")){
+                if (tv_alarm.getText().toString().equals("1")) {
                     fr_iv_post.setImageResource(R.drawable.action_state_stop);
-                    if( !((MainActivity)getActivity()).sounds ) {
+                    if (!((MainActivity) getActivity()).sounds) {
                         // sounds가 false인 경우에 재생
-                        ((MainActivity)getActivity()).soundOn();
+                        ((MainActivity) getActivity()).soundOn();
                     }
-                } else if(tv_alarm.getText().toString().equals("0")) {
+                } else if (tv_alarm.getText().toString().equals("0")) {
                     fr_iv_post.setImageResource(R.drawable.action_state_nosign);
-                    if(((MainActivity)getActivity()).sounds) {
+                    if (((MainActivity) getActivity()).sounds) {
                         //sounds가 true인 경우에 스탑
-                        ((MainActivity)getActivity()).soundStop();
+                        ((MainActivity) getActivity()).soundStop();
                     }
                 }
             }
+
             @Override
             public void afterTextChanged(Editable s) {
             }
@@ -272,14 +328,17 @@ public class MainFragment extends Fragment {
 
         tv_connect.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) { }
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
             @Override
             public void afterTextChanged(Editable s) {
                 // 텍스트 변경 후
-                if(tv_connect.getText().toString().equals("true"))
-                {
+                if (tv_connect.getText().toString().equals("true")) {
                     iv_bluetoothstate.setImageResource(R.drawable.ble_on);
                 } else {
                     iv_bluetoothstate.setImageResource(R.drawable.ble_off);
@@ -290,21 +349,26 @@ public class MainFragment extends Fragment {
             }
         });
 
+
         tv_flow.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) { }
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
             @Override
             public void afterTextChanged(Editable s) {
                 try {
                     fr_tv_flow.setText(tv_flow.getText().toString());
                     fr_tv_flow2.setText(tv_flow.getText().toString());
 
-                    if ( ((MainActivity)getActivity()).mode.equals("1") ) { //아날로그 방식일 경우에만 게이지 바늘 각도계산
+                    if (((MainActivity) getActivity()).mode.equals("1")) { //아날로그 방식일 경우에만 게이지 바늘 각도계산
                         float flow = Float.parseFloat(tv_flow.getText().toString());
                         flow = (flow * (float) 4.5) - 135;
-                        if(flow <= 135) {   //각도가 135도 즉 유량값이 60.0 이하일때
+                        if (flow <= 135) {   //각도가 135도 즉 유량값이 60.0 이하일때
                             analog_gauge_needle.setRotation(flow);
                             Thread.sleep(10);
                         } else {
@@ -314,52 +378,44 @@ public class MainFragment extends Fragment {
                     }
 
 
-                }catch (Exception e) {
+                } catch (Exception e) {
                     Log.d("아날로그유량 각도문제 : ", e.getMessage());
                 }
             }
         });
 
-        tv_comp_state.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) { }
-            @Override
-            public void afterTextChanged(Editable s) {
-                if(tv_comp_state.getText().toString().equals("0")){
-
-                } else if (tv_comp_state.getText().toString().equals("1")){
-
-                }
-            }
-        });
 
         tv_runningtime.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
+
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 fr_tv_action_time.setText(tv_runningtime.getText().toString());
             }
+
             @Override
             public void afterTextChanged(Editable s) {
             }
         });
 
+
         tv_acctime.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
+
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 fr_tv_acc_time.setText(tv_acctime.getText().toString());
             }
+
             @Override
             public void afterTextChanged(Editable s) {
             }
         });
+
 
         tv_comp_state.addTextChangedListener(new TextWatcher() {
             @Override
@@ -368,39 +424,44 @@ public class MainFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(tv_comp_state.getText().toString().equals("0") && tv_washstate.getText().toString().equals("0")) {
+                if (tv_comp_state.getText().toString().equals("0") && tv_washstate.getText().toString().equals("0")) {
                     fr_iv_act.setImageResource(R.drawable.action_state_nosign);
                     fr_iv_stop.setImageResource(R.drawable.action_state_stop);
-                }else if(tv_comp_state.getText().toString().equals("1") && tv_washstate.getText().toString().equals("0")) {
+                } else if (tv_comp_state.getText().toString().equals("1") && tv_washstate.getText().toString().equals("0")) {
                     fr_iv_act.setImageResource(R.drawable.action_state_post);
                     fr_iv_stop.setImageResource(R.drawable.action_state_nosign);
-                }else if(tv_comp_state.getText().toString().equals("1") && tv_washstate.getText().toString().equals("1")) {
+                } else if (tv_comp_state.getText().toString().equals("1") && tv_washstate.getText().toString().equals("1")) {
                     fr_iv_act.setImageResource(R.drawable.action_state_act);
                     fr_iv_stop.setImageResource(R.drawable.action_state_nosign);
                 }
             }
+
             @Override
             public void afterTextChanged(Editable s) {
+
             }
         });
+
 
         tv_washstate.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
+
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(tv_washstate.getText().toString().equals("0") && tv_comp_state.getText().toString().equals("0")) {
+                if (tv_washstate.getText().toString().equals("0") && tv_comp_state.getText().toString().equals("0")) {
                     fr_iv_act.setImageResource(R.drawable.action_state_nosign);
                     fr_iv_stop.setImageResource(R.drawable.action_state_stop);
-                }else if(tv_washstate.getText().toString().equals("1") && tv_comp_state.getText().toString().equals("0")) {
+                } else if (tv_washstate.getText().toString().equals("1") && tv_comp_state.getText().toString().equals("0")) {
                     fr_iv_act.setImageResource(R.drawable.action_state_act);
                     fr_iv_stop.setImageResource(R.drawable.action_state_nosign);
-                }else if(tv_washstate.getText().toString().equals("1") && tv_comp_state.getText().toString().equals("1")) {
+                } else if (tv_washstate.getText().toString().equals("1") && tv_comp_state.getText().toString().equals("1")) {
                     fr_iv_act.setImageResource(R.drawable.action_state_act);
                     fr_iv_stop.setImageResource(R.drawable.action_state_nosign);
                 }
             }
+
             @Override
             public void afterTextChanged(Editable s) {
             }
@@ -408,10 +469,9 @@ public class MainFragment extends Fragment {
 
 
 
-
-
         return rootView;
     }
+
 
 
 }
