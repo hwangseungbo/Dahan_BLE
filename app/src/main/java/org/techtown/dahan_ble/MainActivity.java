@@ -14,6 +14,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.location.LocationManager;
 import android.os.AsyncTask;
@@ -26,9 +27,11 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.util.Xml;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
@@ -78,9 +81,9 @@ public class MainActivity extends AppCompatActivity {
     public static String autoCompressure_default = "0"; //초기값(초기화시 이용)
     public static String flow1;    // 유량계 오동작 알람설정(0 = off, 1 = on, 뒤에 숫자는 주기[초])
     public static String flow1_default = "0,10";    //초기값(초기화시 이용)
-    public static String flow2;    // 유량계 최소값 모니터링(0 = off, 1 = on, 뒤에 숫자는 주기[초])
+    public static String flow2;    // 유량계 최소값 모니터링(0 = off, 1 = on, 뒤에 숫자는 유량최솟값 제한)
     public static String flow2_default = "0,1"; //초기값(초기화시 이용)
-    public static String flow3;    // 유량계 최댓값 모니터링(0 = off, 1 = on, 뒤에 숫자는 주기[초])
+    public static String flow3;    // 유량계 최댓값 모니터링(0 = off, 1 = on, 뒤에 숫자는 유량최댓값 제한)
     public static String flow3_default = "0,60";    //초기값(초기화시 이용)
     public static String cleanPower; // 세척강도
     public static String cleanPower2; // 세척강도
@@ -998,5 +1001,20 @@ public class MainActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
-
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        View focusView = getCurrentFocus();
+        if(focusView != null) {
+            Rect rect = new Rect();
+            focusView.getGlobalVisibleRect(rect);
+            int x = (int) ev.getX(), y = (int) ev.getY();
+            if(!rect.contains(x,y)) {
+                InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                if(imm != null)
+                    imm.hideSoftInputFromWindow(focusView.getWindowToken(),0);
+                focusView.clearFocus();
+            }
+        }
+        return super.dispatchTouchEvent(ev);
+    }
 }

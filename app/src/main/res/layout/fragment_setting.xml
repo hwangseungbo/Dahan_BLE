@@ -13,7 +13,10 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="1080px"
-            android:layout_height="3425px">
+            android:layout_height="3425px"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            >
 
             <ImageView
                 android:id="@+id/imageView2"
@@ -140,7 +143,7 @@
                 android:background="@drawable/time_button_pressed"
                 android:ems="10"
                 android:gravity="center"
-                android:inputType="text"
+                android:inputType="number"
                 android:text="10"
                 android:textColor="#FFFFFF"
                 app:layout_constraintStart_toEndOf="@+id/fr_sw_flow1"
@@ -154,7 +157,7 @@
                 android:background="@drawable/time_button_pressed"
                 android:ems="10"
                 android:gravity="center"
-                android:inputType="text"
+                android:inputType="number"
                 android:text="1"
                 android:textColor="#FFFFFF"
                 app:layout_constraintStart_toEndOf="@+id/fr_sw_flow2"
@@ -168,7 +171,7 @@
                 android:background="@drawable/time_button_pressed"
                 android:ems="10"
                 android:gravity="center"
-                android:inputType="text"
+                android:inputType="number"
                 android:text="60"
                 android:textColor="#FFFFFF"
                 app:layout_constraintStart_toEndOf="@+id/fr_sw_flow3"

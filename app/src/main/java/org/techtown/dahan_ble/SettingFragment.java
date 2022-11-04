@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Switch;
@@ -68,6 +69,7 @@ public class SettingFragment extends Fragment {
         TextView fr_setting_devName = (TextView) rootView.findViewById(R.id.fr_setting_devName);
         TextView fr_setting_macAdd = (TextView) rootView.findViewById(R.id.fr_setting_macAdd);
 
+        fr_et_flow1.clearFocus();
 
         //이니셜라이징
         mode_temp = ((MainActivity)getActivity()).mode;
@@ -86,6 +88,7 @@ public class SettingFragment extends Fragment {
         } else {
             iv_bluetoothstate2.setImageResource(R.drawable.ble_off);
         }
+        ((MainActivity)getActivity()).showToast(flow1_temp+ " " + flow2_temp + " " + flow3_temp );
 
         // 설정파일값을 확인하여 UI 초기화
         // <메인화면 테마설정>
@@ -115,11 +118,22 @@ public class SettingFragment extends Fragment {
             fr_et_flow1.setBackgroundResource(R.drawable.time_button_unpressed);
             fr_et_flow1.setText(flow1[1]);
             fr_et_flow1.setEnabled(false);
+
+            fr_sw_flow2.setChecked(false);
+            fr_sw_flow2.setEnabled(false);
+            fr_et_flow2.setEnabled(false);
+
+            fr_sw_flow3.setChecked(false);
+            fr_sw_flow3.setEnabled(false);
+            fr_et_flow3.setEnabled(false);
+
         } else {
             fr_sw_flow1.setChecked(true);
             fr_et_flow1.setBackgroundResource(R.drawable.time_button_pressed);
             fr_et_flow1.setText(flow1[1]);
             fr_et_flow1.setEnabled(true);
+
+
         }
 
         if( flow2[0].equals("0") ) {
@@ -175,7 +189,7 @@ public class SettingFragment extends Fragment {
                 }
             }
         });
-
+        /*
         fr_sw_flow1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -187,10 +201,12 @@ public class SettingFragment extends Fragment {
                     flow1_temp = "1," + fr_et_flow1.getText().toString().trim();
                 }else{
                     fr_et_flow1.setBackgroundResource(R.drawable.time_button_unpressed);
-                    fr_et_flow1.setEnabled(false);
+                    fr_et_flow2.setBackgroundResource(R.drawable.time_button_unpressed);
+                    fr_et_flow3.setBackgroundResource(R.drawable.time_button_unpressed);
                     flow1_temp = "0," + fr_et_flow1.getText().toString().trim();
                     flow2_temp = "0," + fr_et_flow1.getText().toString().trim();
                     flow3_temp = "0," + fr_et_flow1.getText().toString().trim();
+                    fr_et_flow1.setEnabled(false);
                     fr_sw_flow2.setChecked(false);
                     fr_sw_flow2.setEnabled(false);
                     fr_sw_flow3.setChecked(false);
@@ -198,7 +214,70 @@ public class SettingFragment extends Fragment {
                 }
             }
         });
+        */
+        fr_sw_flow1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked) {
+                    //on일때 함수
+                    fr_et_flow1.setBackgroundResource(R.drawable.time_button_pressed);
+                    fr_et_flow1.setEnabled(true);
 
+                    flow1_temp = "1," + fr_et_flow1.getText().toString().trim();
+
+                    fr_sw_flow2.setEnabled(true);
+                    fr_sw_flow2.setChecked(false);
+                    fr_et_flow2.setEnabled(false);
+
+                    fr_sw_flow3.setEnabled(true);
+                    fr_sw_flow3.setChecked(false);
+                    fr_et_flow3.setEnabled(false);
+
+
+                } else {
+                    //off일때 함수
+                    fr_et_flow1.setBackgroundResource(R.drawable.time_button_unpressed);
+                    fr_et_flow2.setBackgroundResource(R.drawable.time_button_unpressed);
+                    fr_et_flow3.setBackgroundResource(R.drawable.time_button_unpressed);
+
+                    flow1_temp = "0," + fr_et_flow1.getText().toString().trim();
+                    flow2_temp = "0," + fr_et_flow2.getText().toString().trim();
+                    flow3_temp = "0," + fr_et_flow3.getText().toString().trim();
+
+                    fr_et_flow1.setEnabled(false);
+
+                    fr_sw_flow2.setChecked(false);
+                    fr_sw_flow2.setEnabled(false);
+                    fr_et_flow2.setEnabled(false);
+
+                    fr_sw_flow3.setChecked(false);
+                    fr_sw_flow3.setEnabled(false);
+                    fr_et_flow3.setEnabled(false);
+                }
+            }
+        });
+
+
+        fr_et_flow1.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String[] flow1 = ((MainActivity)getActivity()).flow1.split(",");
+                if(fr_sw_flow1.isChecked()) {
+                    flow1_temp = "1," + fr_et_flow1.getText().toString().trim();
+                } else {
+                    flow1_temp = "0," + fr_et_flow1.getText().toString().trim();
+                }
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
+
+        /*
         fr_sw_flow2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -213,7 +292,45 @@ public class SettingFragment extends Fragment {
                 }
             }
         });
+        */
+        fr_sw_flow2.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked) {
+                    //on일때 함수
+                    fr_et_flow2.setBackgroundResource(R.drawable.time_button_pressed);
+                    fr_et_flow2.setEnabled(true);
+                    flow2_temp = "1," + fr_et_flow2.getText().toString().trim();
+                } else {
+                    //off일때 함수
+                    fr_et_flow2.setBackgroundResource(R.drawable.time_button_unpressed);
+                    fr_et_flow2.setEnabled(false);
+                    flow2_temp = "0," + fr_et_flow2.getText().toString().trim();
+                }
+            }
+        });
+        fr_et_flow2.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String[] flow2 = ((MainActivity)getActivity()).flow2.split(",");
 
+                if(fr_sw_flow2.isChecked()){
+                    flow2_temp = "1," + fr_et_flow2.getText().toString().trim();
+                }
+                else {
+                    flow2_temp = "0," + fr_et_flow2.getText().toString().trim();
+                }
+
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
+        /*
         fr_sw_flow3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -226,6 +343,42 @@ public class SettingFragment extends Fragment {
                     fr_et_flow3.setEnabled(false);
                     flow3_temp = "0," + fr_et_flow3.getText().toString().trim();
                 }
+            }
+        });
+        */
+        fr_sw_flow3.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked) {
+                    //on일때 함수
+                    fr_et_flow3.setBackgroundResource(R.drawable.time_button_pressed);
+                    fr_et_flow3.setEnabled(true);
+                    flow3_temp = "1," + fr_et_flow3.getText().toString().trim();
+                } else {
+                    //off일때 함수
+                    fr_et_flow3.setBackgroundResource(R.drawable.time_button_unpressed);
+                    fr_et_flow3.setEnabled(false);
+                    flow3_temp = "0," + fr_et_flow3.getText().toString().trim();
+                }
+            }
+        });
+        fr_et_flow3.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String[] flow3 = ((MainActivity)getActivity()).flow3.split(",");
+
+                if(fr_sw_flow3.isChecked()) {
+                    flow3_temp = "1," + fr_et_flow3.getText().toString().trim();
+                }else {
+                    flow3_temp = "0," + fr_et_flow3.getText().toString().trim();
+                }
+
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
             }
         });
 
@@ -352,7 +505,6 @@ public class SettingFragment extends Fragment {
             public void onClick(View v) {
                 MainActivity mainActivity = (MainActivity) getActivity();
 
-
                 // 설정파일값을 확인하여 UI 초기화
                 // <메인화면 테마설정>
                 if( ((MainActivity)getActivity()).mode.equals("0") ){
@@ -458,6 +610,8 @@ public class SettingFragment extends Fragment {
 
                 ((MainActivity)getActivity()).save();
 
+
+                /*
                 // 설정파일값을 확인하여 UI 초기화
                 // <메인화면 테마설정>
                 if( ((MainActivity)getActivity()).mode.equals("0") ){
@@ -514,8 +668,9 @@ public class SettingFragment extends Fragment {
                 et_cleanpower2.setText(((MainActivity)getActivity()).cleanPower2);
                 et_cleanpower3.setText(((MainActivity)getActivity()).cleanPower3);
                 et_cleanpower4.setText(((MainActivity)getActivity()).cleanPower4);
+                */
 
-
+                //((MainActivity)getActivity()).showToast( flow1_temp + " " + flow2_temp + " " + flow3_temp);
                 ((MainActivity)getActivity()).showToast( "저장 되었습니다.");
             }
         });
